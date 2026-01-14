@@ -6,9 +6,10 @@ import pytest
 @pytest.fixture
 def sample_publication():
     """Create a sample publication for testing."""
-    from litforge.models import Author, Publication, PublicationType
+    from litforge.models import Author, Publication, PublicationType, AccessType
     
     return Publication(
+        id="test-pub-001",
         title="CRISPR-Cas9 gene editing in human cells",
         authors=[
             Author(name="John Smith", orcid="0000-0001-2345-6789"),
@@ -20,7 +21,7 @@ def sample_publication():
         venue="Nature Methods",
         publication_type=PublicationType.ARTICLE,
         citation_count=100,
-        is_open_access=True,
+        access_type=AccessType.OPEN,
     )
 
 
@@ -32,6 +33,7 @@ def sample_publications(sample_publication):
     return [
         sample_publication,
         Publication(
+            id="test-pub-002",
             title="Machine learning for drug discovery",
             authors=[Author(name="Alice Johnson")],
             abstract="Using ML models to predict drug candidates.",
@@ -41,6 +43,7 @@ def sample_publications(sample_publication):
             citation_count=50,
         ),
         Publication(
+            id="test-pub-003",
             title="Deep learning in genomics",
             authors=[Author(name="Bob Wilson")],
             abstract="Neural networks for genomic analysis.",
