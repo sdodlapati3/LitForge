@@ -7,12 +7,43 @@ Provides RAG-based Q&A over the literature corpus.
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass, field
 from typing import Any, Sequence
 
 from litforge.config import LitForgeConfig, get_config
 from litforge.models import Publication
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class QAResponse:
+    """Response from the Q&A service."""
+    
+    answer: str
+    sources: list[dict[str, str]] = field(default_factory=list)
+    confidence: str = "medium"  # low, medium, high
+    context_used: bool = True
+    related_questions: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ChatResponse:
+    """Response from the chat service."""
+    
+    response: str
+    context_used: bool = False
+    history_length: int = 0
+
+
+@dataclass 
+class ComparisonResult:
+    """Result of comparing papers."""
+    
+    summary: str
+    similarities: list[str] = field(default_factory=list)
+    differences: list[str] = field(default_factory=list)
+    papers: list[str] = field(default_factory=list)
 
 
 # Default prompts
@@ -41,6 +72,20 @@ Provide a coherent summary that:
 2. Notes any contradictions or debates
 3. Highlights key methodologies
 4. Suggests gaps or future directions"""
+
+COMPARE_PROMPT_TEMPLATE = """Compare the following scientific papers:
+
+{papers}
+
+Please provide:
+1. A brief summary of each paper's main contribution
+2. Key similarities between the papers
+3. Key differences between the papers
+4. How they relate to each other in the broader field"""
+
+FOLLOW_UP_PROMPT = """Based on the question "{question}" and the answer provided, suggest 3 related follow-up questions that would help deepen understanding of this topic.
+
+Format as a numbered list."""
 
 CHAT_SYSTEM_PROMPT = """You are a research assistant helping with literature review.
 You have access to a corpus of scientific papers.
@@ -117,7 +162,8 @@ class QAService:
         question: str,
         context_limit: int = 5,
         max_context_tokens: int = 4000,
-    ) -> dict[str, Any]:
+        generate_follow_ups: bool = False,
+    ) -> QAResponse:
         """
         Ask a question about the indexed literature.
         
@@ -125,9 +171,10 @@ class QAService:
             question: Question to answer
             context_limit: Maximum context chunks to retrieve
             max_context_tokens: Maximum tokens in context
+            generate_follow_ups: Generate related follow-up questions
             
         Returns:
-            Dict with answer and sources
+            QAResponse with answer and sources
         """
         # Retrieve context
         context = self.knowledge.get_context(
@@ -137,11 +184,12 @@ class QAService:
         )
         
         if not context:
-            return {
-                "answer": "I don't have enough information in the knowledge base to answer this question. Please index some relevant papers first.",
-                "sources": [],
-                "context_used": False,
-            }
+            return QAResponse(
+                answer="I don't have enough information in the knowledge base to answer this question. Please index some relevant papers first.",
+                sources=[],
+                context_used=False,
+                confidence="low",
+            )
         
         # Build prompt
         prompt = RAG_PROMPT_TEMPLATE.format(
@@ -158,17 +206,145 @@ class QAService:
         # Extract sources from context
         sources = self._extract_sources(context)
         
-        return {
-            "answer": response,
-            "sources": sources,
-            "context_used": True,
-        }
+        # Determine confidence based on number of sources
+        if len(sources) >= 3:
+            confidence = "high"
+        elif len(sources) >= 1:
+            confidence = "medium"
+        else:
+            confidence = "low"
+        
+        # Generate follow-up questions if requested
+        related_questions = []
+        if generate_follow_ups:
+            related_questions = self._generate_follow_ups(question, response)
+        
+        return QAResponse(
+            answer=response,
+            sources=sources,
+            context_used=True,
+            confidence=confidence,
+            related_questions=related_questions,
+        )
     
+    def _generate_follow_ups(self, question: str, answer: str) -> list[str]:
+        """Generate follow-up questions based on Q&A."""
+        try:
+            prompt = FOLLOW_UP_PROMPT.format(question=question)
+            response = self.llm.generate(prompt=prompt, system_prompt=SYSTEM_PROMPT)
+            
+            # Parse numbered list
+            questions = []
+            for line in response.split("\n"):
+                line = line.strip()
+                # Remove numbering
+                if line and line[0].isdigit():
+                    # Remove "1." or "1)" etc.
+                    parts = line.split(".", 1) if "." in line[:3] else line.split(")", 1)
+                    if len(parts) > 1:
+                        questions.append(parts[1].strip())
+                    else:
+                        questions.append(line)
+            
+            return questions[:3]  # Limit to 3
+        except Exception as e:
+            logger.warning(f"Failed to generate follow-up questions: {e}")
+            return []
+    
+    def compare(
+        self,
+        publications: Sequence[Publication],
+    ) -> ComparisonResult:
+        """
+        Compare multiple papers to identify similarities and differences.
+        
+        Args:
+            publications: Papers to compare (2-5 papers recommended)
+            
+        Returns:
+            ComparisonResult with summary, similarities, and differences
+        """
+        if len(publications) < 2:
+            return ComparisonResult(
+                summary="Need at least 2 papers to compare.",
+                papers=[p.title for p in publications],
+            )
+        
+        # Build paper descriptions
+        paper_descriptions = []
+        paper_titles = []
+        for i, pub in enumerate(publications[:5], 1):  # Limit to 5 papers
+            paper_titles.append(pub.title)
+            authors = ", ".join(a.name for a in pub.authors[:3])
+            if len(pub.authors) > 3:
+                authors += " et al."
+            
+            desc = f"{i}. {pub.title}"
+            desc += f"\n   Authors: {authors}"
+            if pub.year:
+                desc += f"\n   Year: {pub.year}"
+            if pub.abstract:
+                desc += f"\n   Abstract: {pub.abstract[:600]}"
+            
+            paper_descriptions.append(desc)
+        
+        papers_text = "\n\n".join(paper_descriptions)
+        
+        # Get comparison
+        prompt = COMPARE_PROMPT_TEMPLATE.format(papers=papers_text)
+        response = self.llm.generate(
+            prompt=prompt,
+            system_prompt=SYSTEM_PROMPT,
+        )
+        
+        # Parse response to extract similarities/differences
+        similarities = self._extract_list_items(response, "similarities")
+        differences = self._extract_list_items(response, "differences")
+        
+        return ComparisonResult(
+            summary=response,
+            similarities=similarities,
+            differences=differences,
+            papers=paper_titles,
+        )
+    
+    def _extract_list_items(self, text: str, section_name: str) -> list[str]:
+        """Extract list items from a section of text."""
+        items = []
+        in_section = False
+        
+        for line in text.split("\n"):
+            line_lower = line.lower()
+            
+            # Check if we're entering the target section
+            if section_name.lower() in line_lower and (":" in line or "#" in line):
+                in_section = True
+                continue
+            
+            # Check if we're leaving the section
+            if in_section and line.strip() and not line.startswith(" ") and not line.startswith("-") and not line[0].isdigit():
+                if any(word in line_lower for word in ["difference", "similar", "summary", "relate"]):
+                    in_section = False
+                    continue
+            
+            # Extract list items
+            if in_section and line.strip():
+                item = line.strip()
+                if item.startswith("-") or item.startswith("•"):
+                    item = item[1:].strip()
+                elif item[0].isdigit() and ("." in item[:3] or ")" in item[:3]):
+                    item = item.split(".", 1)[-1].split(")", 1)[-1].strip()
+                
+                if item and len(item) > 10:
+                    items.append(item)
+        
+        return items[:5]  # Limit to 5 items
+
     def chat(
         self,
         message: str,
         use_context: bool = True,
-    ) -> dict[str, Any]:
+    ) -> ChatResponse:
         """
         Multi-turn chat about the literature.
         
@@ -177,7 +353,7 @@ class QAService:
             use_context: Whether to retrieve context for the response
             
         Returns:
-            Dict with response and metadata
+            ChatResponse with response and metadata
         """
         # Add user message to history
         self._chat_history.append({"role": "user", "content": message})
@@ -208,11 +384,11 @@ class QAService:
         # Add to history
         self._chat_history.append({"role": "assistant", "content": response})
         
-        return {
-            "response": response,
-            "context_used": bool(context),
-            "history_length": len(self._chat_history),
-        }
+        return ChatResponse(
+            response=response,
+            context_used=bool(context),
+            history_length=len(self._chat_history),
+        )
     
     def clear_chat_history(self) -> None:
         """Clear the chat history."""
