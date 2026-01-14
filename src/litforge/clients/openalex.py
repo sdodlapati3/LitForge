@@ -81,19 +81,19 @@ class OpenAlexClient(BaseClient):
                 filter_parts.append(f"publication_year:>{filters.year_from - 1}")
             if filters.year_to:
                 filter_parts.append(f"publication_year:<{filters.year_to + 1}")
-            if filters.types:
+            if filters.publication_types:
                 type_map = {
-                    PublicationType.ARTICLE: "article",
-                    PublicationType.REVIEW: "review",
-                    PublicationType.PREPRINT: "preprint",
-                    PublicationType.BOOK_CHAPTER: "book-chapter",
-                    PublicationType.BOOK: "book",
+                    "article": "article",
+                    "review": "review",
+                    "preprint": "preprint",
+                    "book_chapter": "book-chapter",
+                    "book": "book",
                 }
-                types = [type_map.get(t, t.value) for t in filters.types]
+                types = [type_map.get(t, t) for t in filters.publication_types]
                 filter_parts.append(f"type:{'|'.join(types)}")
-            if filters.open_access:
+            if filters.open_access_only:
                 filter_parts.append("is_oa:true")
-            if filters.has_pdf:
+            if filters.has_full_text:
                 filter_parts.append("has_fulltext:true")
         
         if filter_parts:
@@ -210,7 +210,17 @@ class OpenAlexClient(BaseClient):
             oa_url = best_oa.get("landing_page_url")
             pdf_url = best_oa.get("pdf_url")
         
+        # Generate internal ID from OpenAlex ID
+        openalex_id = data.get("id", "").replace("https://openalex.org/", "")
+        internal_id = f"openalex:{openalex_id}" if openalex_id else f"openalex:{hash(data.get('title', ''))}"
+        
+        # Extract keyword strings from concepts
+        keywords = []
+        if data.get("concepts"):
+            keywords = [c.get("display_name", "") for c in data.get("concepts", [])[:10] if isinstance(c, dict) and c.get("display_name")]
+        
         return Publication(
+            id=internal_id,
             title=data.get("title", "Untitled"),
             authors=authors,
             abstract=data.get("abstract"),
@@ -222,9 +232,9 @@ class OpenAlexClient(BaseClient):
             issue=data.get("biblio", {}).get("issue"),
             pages=data.get("biblio", {}).get("first_page"),
             publication_type=pub_type,
-            keywords=data.get("concepts", [])[:10] if data.get("concepts") else None,
+            keywords=keywords,
             citation_count=data.get("cited_by_count", 0),
-            openalex_id=data.get("id", "").replace("https://openalex.org/", ""),
+            openalex_id=openalex_id,
             url=oa_url or data.get("doi"),
             pdf_url=pdf_url,
             is_open_access=data.get("open_access", {}).get("is_oa", False),

@@ -190,6 +190,7 @@ class ArxivClient(BaseClient):
             abs_url = f"https://arxiv.org/abs/{base_id}"
             
             return Publication(
+                id=f"arxiv:{base_id}",
                 title=title,
                 authors=authors,
                 abstract=abstract,

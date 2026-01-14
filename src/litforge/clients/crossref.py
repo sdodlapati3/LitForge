@@ -186,7 +186,11 @@ class CrossrefClient(BaseClient):
         # Get DOI
         doi = data.get("DOI")
         
+        # Generate internal ID from DOI
+        internal_id = f"crossref:{doi}" if doi else f"crossref:{hash(title)}"
+        
         return Publication(
+            id=internal_id,
             title=title,
             authors=authors,
             abstract=abstract,

@@ -83,7 +83,7 @@ class SemanticScholarClient(BaseClient):
                     params["year"] = params["year"][:-1] + f"-{filters.year_to}"
                 else:
                     params["year"] = f"-{filters.year_to}"
-            if filters.open_access:
+            if filters.open_access_only:
                 params["openAccessPdf"] = ""
         
         response = self._get(
@@ -247,7 +247,12 @@ class SemanticScholarClient(BaseClient):
         if oa_pdf:
             pdf_url = oa_pdf.get("url")
         
+        # Generate internal ID from Semantic Scholar paper ID
+        ss_id = data.get("paperId", "")
+        internal_id = f"s2:{ss_id}" if ss_id else f"s2:{hash(data.get('title', ''))}"
+        
         return Publication(
+            id=internal_id,
             title=data.get("title", "Untitled"),
             authors=authors,
             abstract=data.get("abstract"),
@@ -256,9 +261,9 @@ class SemanticScholarClient(BaseClient):
             publication_date=pub_date,
             venue=data.get("venue"),
             publication_type=PublicationType.ARTICLE,
-            keywords=data.get("fieldsOfStudy"),
+            keywords=data.get("fieldsOfStudy") or [],
             citation_count=data.get("citationCount", 0),
-            semantic_scholar_id=data.get("paperId"),
+            semantic_scholar_id=ss_id,
             pmid=ext_ids.get("PubMed"),
             pmcid=ext_ids.get("PubMedCentral"),
             arxiv_id=ext_ids.get("ArXiv"),

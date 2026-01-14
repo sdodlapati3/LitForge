@@ -88,15 +88,15 @@ class PubMedClient(BaseClient):
             elif filters.year_to:
                 search_terms.append(f"1800:{filters.year_to}[dp]")
             
-            if filters.types:
+            if filters.publication_types:
                 type_map = {
-                    PublicationType.REVIEW: "review[pt]",
+                    "review": "review[pt]",
                 }
-                for t in filters.types:
+                for t in filters.publication_types:
                     if t in type_map:
                         search_terms.append(type_map[t])
             
-            if filters.open_access:
+            if filters.open_access_only:
                 search_terms.append("free full text[sb]")
         
         # Search for IDs
@@ -275,7 +275,11 @@ class PubMedClient(BaseClient):
                 if mesh.text:
                     keywords.append(mesh.text)
             
+            # Generate internal ID from PMID
+            internal_id = f"pubmed:{pmid}" if pmid else f"pubmed:{hash(title)}"
+            
             return Publication(
+                id=internal_id,
                 title=title,
                 authors=authors,
                 abstract=abstract,
