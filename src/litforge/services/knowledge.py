@@ -1,13 +1,14 @@
 """
 Knowledge Service - Vector store and semantic search.
 
-Manages document indexing and similarity search.
+Manages document indexing and similarity search with RAG support.
 """
 
 from __future__ import annotations
 
 import hashlib
 import logging
+import re
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -108,6 +109,7 @@ class KnowledgeService:
         self,
         publications: Sequence[Publication],
         include_fulltext: bool = True,
+        section_aware: bool = True,
         chunk_size: int = 1000,
         chunk_overlap: int = 200,
     ) -> int:
@@ -117,6 +119,7 @@ class KnowledgeService:
         Args:
             publications: Publications to index
             include_fulltext: Whether to retrieve and index full text
+            section_aware: Use section-aware chunking (requires full text)
             chunk_size: Size of text chunks
             chunk_overlap: Overlap between chunks
             
@@ -130,6 +133,7 @@ class KnowledgeService:
                 chunks = self._process_publication(
                     pub,
                     include_fulltext=include_fulltext,
+                    section_aware=section_aware,
                     chunk_size=chunk_size,
                     chunk_overlap=chunk_overlap,
                 )
@@ -137,7 +141,7 @@ class KnowledgeService:
                 if not chunks:
                     continue
                 
-                # Generate embeddings
+                # Generate embeddings in batches
                 texts = [c["text"] for c in chunks]
                 embeddings = self.embedder.embed(texts)
                 
@@ -163,6 +167,7 @@ class KnowledgeService:
         query: str,
         limit: int = 10,
         filter_metadata: dict[str, Any] | None = None,
+        section_filter: str | list[str] | None = None,
     ) -> list[dict[str, Any]]:
         """
         Search the knowledge base.
@@ -171,10 +176,33 @@ class KnowledgeService:
             query: Search query
             limit: Maximum results
             filter_metadata: Optional metadata filters
+            section_filter: Filter by section name(s) (e.g., "methods", ["abstract", "results"])
             
         Returns:
             List of matching chunks with metadata and scores
         """
+        # Build metadata filter
+        if section_filter:
+            if filter_metadata is None:
+                filter_metadata = {}
+            if isinstance(section_filter, str):
+                filter_metadata["section"] = section_filter
+            else:
+                # Multiple sections - will need to search each and combine
+                all_results = []
+                for section in section_filter:
+                    section_filter_meta = {**filter_metadata, "section": section}
+                    query_embedding = self.embedder.embed([query])[0]
+                    results = self.vector_store.search(
+                        embedding=query_embedding,
+                        limit=limit,
+                        filter_metadata=section_filter_meta,
+                    )
+                    all_results.extend(results)
+                # Sort by score and limit
+                all_results.sort(key=lambda x: x.get("score", 0), reverse=True)
+                return all_results[:limit]
+        
         # Generate query embedding
         query_embedding = self.embedder.embed([query])[0]
         
@@ -187,6 +215,79 @@ class KnowledgeService:
         
         return results
     
+    def hybrid_search(
+        self,
+        query: str,
+        limit: int = 10,
+        semantic_weight: float = 0.7,
+        keyword_weight: float = 0.3,
+    ) -> list[dict[str, Any]]:
+        """
+        Perform hybrid search combining semantic and keyword search.
+        
+        Args:
+            query: Search query
+            limit: Maximum results
+            semantic_weight: Weight for semantic search scores (0-1)
+            keyword_weight: Weight for keyword search scores (0-1)
+            
+        Returns:
+            List of matching chunks with combined scores
+        """
+        # Get semantic results (more than needed for re-ranking)
+        semantic_results = self.search(query, limit=limit * 2)
+        
+        # Extract keywords from query
+        keywords = self._extract_keywords(query)
+        
+        # Score results by keyword matches
+        scored_results = []
+        for result in semantic_results:
+            text = result.get("text", "").lower()
+            
+            # Calculate keyword score
+            keyword_matches = sum(1 for kw in keywords if kw.lower() in text)
+            keyword_score = keyword_matches / max(len(keywords), 1)
+            
+            # Combine scores
+            semantic_score = result.get("score", 0)
+            combined_score = (
+                semantic_weight * semantic_score + keyword_weight * keyword_score
+            )
+            
+            result["semantic_score"] = semantic_score
+            result["keyword_score"] = keyword_score
+            result["score"] = combined_score
+            scored_results.append(result)
+        
+        # Sort by combined score
+        scored_results.sort(key=lambda x: x["score"], reverse=True)
+        
+        return scored_results[:limit]
+    
+    def _extract_keywords(self, query: str) -> list[str]:
+        """Extract important keywords from a query."""
+        # Remove common stopwords and keep meaningful terms
+        stopwords = {
+            "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",
+            "have", "has", "had", "do", "does", "did", "will", "would", "could",
+            "should", "may", "might", "must", "shall", "can", "need", "dare",
+            "ought", "used", "to", "of", "in", "for", "on", "with", "at", "by",
+            "from", "as", "into", "through", "during", "before", "after",
+            "above", "below", "between", "under", "again", "further", "then",
+            "once", "here", "there", "when", "where", "why", "how", "all", "each",
+            "few", "more", "most", "other", "some", "such", "no", "nor", "not",
+            "only", "own", "same", "so", "than", "too", "very", "just", "and",
+            "but", "if", "or", "because", "until", "while", "what", "which",
+            "who", "whom", "this", "that", "these", "those", "am", "about",
+        }
+        
+        # Tokenize and filter
+        words = re.findall(r'\b[a-zA-Z]{2,}\b', query.lower())
+        keywords = [w for w in words if w not in stopwords]
+        
+        return keywords
+
     def get_context(
         self,
         query: str,
@@ -234,6 +335,7 @@ class KnowledgeService:
         self,
         publication: Publication,
         include_fulltext: bool,
+        section_aware: bool,
         chunk_size: int,
         chunk_overlap: int,
     ) -> list[dict[str, Any]]:
@@ -253,24 +355,67 @@ class KnowledgeService:
             chunks.append({
                 "id": self._generate_chunk_id(publication, "abstract"),
                 "text": f"Title: {publication.title}\n\nAbstract: {publication.abstract}",
-                "metadata": {**base_metadata, "chunk_type": "abstract"},
+                "metadata": {**base_metadata, "chunk_type": "abstract", "section": "abstract"},
             })
         
         # Get full text if requested
         if include_fulltext:
-            fulltext = self.retrieval.retrieve(publication)
-            if fulltext:
-                text_chunks = self._chunk_text(fulltext, chunk_size, chunk_overlap)
-                for i, text in enumerate(text_chunks):
-                    chunks.append({
-                        "id": self._generate_chunk_id(publication, f"fulltext_{i}"),
-                        "text": text,
-                        "metadata": {
-                            **base_metadata,
-                            "chunk_type": "fulltext",
-                            "chunk_index": i,
-                        },
-                    })
+            if section_aware:
+                # Use section-aware retrieval and chunking
+                pub_with_sections = self.retrieval.retrieve_with_sections(publication)
+                if pub_with_sections.sections:
+                    # Index each section separately
+                    for section_name, section_content in pub_with_sections.sections.items():
+                        if section_name == "references":
+                            continue  # Skip references section
+                        
+                        # Chunk each section
+                        section_chunks = self._chunk_text(
+                            section_content, chunk_size, chunk_overlap
+                        )
+                        for i, text in enumerate(section_chunks):
+                            chunks.append({
+                                "id": self._generate_chunk_id(
+                                    publication, f"{section_name}_{i}"
+                                ),
+                                "text": f"[{section_name.upper()}]\n{text}",
+                                "metadata": {
+                                    **base_metadata,
+                                    "chunk_type": "section",
+                                    "section": section_name,
+                                    "chunk_index": i,
+                                },
+                            })
+                elif pub_with_sections.full_text:
+                    # Fall back to regular chunking
+                    text_chunks = self._chunk_text(
+                        pub_with_sections.full_text, chunk_size, chunk_overlap
+                    )
+                    for i, text in enumerate(text_chunks):
+                        chunks.append({
+                            "id": self._generate_chunk_id(publication, f"fulltext_{i}"),
+                            "text": text,
+                            "metadata": {
+                                **base_metadata,
+                                "chunk_type": "fulltext",
+                                "chunk_index": i,
+                            },
+                        })
+            else:
+                # Regular full text retrieval
+                fulltext = self.retrieval.retrieve(publication)
+                if fulltext:
+                    text_chunks = self._chunk_text(fulltext, chunk_size, chunk_overlap)
+                    for i, text in enumerate(text_chunks):
+                        chunks.append({
+                            "id": self._generate_chunk_id(publication, f"fulltext_{i}"),
+                            "text": text,
+                            "metadata": {
+                                **base_metadata,
+                                "chunk_type": "fulltext",
+                                "chunk_index": i,
+                            },
+                        })
         
         return chunks
     
