@@ -295,7 +295,10 @@ class Publication(BaseModel):
     def to_bibtex(self) -> str:
         """Generate BibTeX entry."""
         # Generate key
-        first_author = self.authors[0].family_name if self.authors else "unknown"
+        if self.authors:
+            first_author = self.authors[0].family_name or self.authors[0].name.split()[-1]
+        else:
+            first_author = "unknown"
         year = self.year or "nd"
         key = f"{first_author.lower()}{year}"
         

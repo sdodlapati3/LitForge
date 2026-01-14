@@ -267,6 +267,46 @@ def _print_paper(
     click.echo()
 
 
+@cli.command()
+@click.option("--port", "-p", default=8501, help="Port to run the web UI on")
+@click.option("--host", "-h", default="localhost", help="Host to bind to")
+def ui(port: int, host: str) -> None:
+    """Launch the LitForge web UI.
+    
+    Example: litforge ui --port 8501
+    """
+    import subprocess
+    import sys
+    from pathlib import Path
+    
+    ui_path = Path(__file__).parent / "ui" / "app.py"
+    
+    click.echo(f"🔥 Starting LitForge Web UI at http://{host}:{port}")
+    click.echo("   Press Ctrl+C to stop")
+    
+    subprocess.run([
+        sys.executable, "-m", "streamlit", "run",
+        str(ui_path),
+        "--server.port", str(port),
+        "--server.address", host,
+    ])
+
+
+@cli.command()
+def mcp() -> None:
+    """Start the LitForge MCP server for AI assistants.
+    
+    Example: litforge mcp
+    """
+    click.echo("🔥 Starting LitForge MCP Server...")
+    
+    try:
+        from litforge.mcp.server import main as mcp_main
+        mcp_main()
+    except ImportError:
+        click.echo("Error: MCP not installed. Run: pip install mcp")
+
+
 def main() -> None:
     """Main entry point."""
     cli()

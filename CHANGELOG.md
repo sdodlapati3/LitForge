@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MCP server for AI agent integration
 - CLI tool for command-line usage
 - Configuration system with YAML/env support
+- **Qdrant vector store** - Production-ready vector database with cloud/self-hosted support
+- **FAISS vector store** - High-performance local vector search with GPU support
+- **MCP server** - Model Context Protocol server for ChemAgent/OmicsOracle integration
+- **CrewAI integration** - Full toolkit for CrewAI agents (search, retrieve, cite, ask)
+- **LangGraph integration** - Tools and agent factory for LangGraph workflows
+- **LangChain integration** - Tools and retriever for LangChain RAG pipelines
 
 ### Changed
 - N/A
