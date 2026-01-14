@@ -12,7 +12,7 @@ from typing import Any, Optional
 import click
 
 from litforge import Forge
-from litforge.config import load_config
+from litforge.config import LitForgeConfig
 
 
 @click.group()
@@ -32,7 +32,7 @@ def cli(ctx: click.Context, config: Optional[str]) -> None:
     ctx.ensure_object(dict)
     
     if config:
-        ctx.obj["config"] = load_config(Path(config))
+        ctx.obj["config"] = LitForgeConfig.load(Path(config))
     else:
         ctx.obj["config"] = None
 
@@ -75,31 +75,32 @@ def search(
     forge = Forge(config=ctx.obj["config"])
     
     # Build filters
-    from litforge.models import SearchFilter
-    filters = SearchFilter(
-        year_from=year_from,
-        year_to=year_to,
-        open_access=open_access if open_access else None,
-    )
+    filters = {}
+    if year_from:
+        filters["year_from"] = year_from
+    if year_to:
+        filters["year_to"] = year_to
+    if open_access:
+        filters["open_access_only"] = True
     
     # Search
-    result = forge.search(
+    papers = forge.search(
         query,
         sources=list(sources),
         limit=limit,
-        filters=filters,
+        **filters,
     )
     
     # Output
     if output == "json":
-        click.echo(json.dumps([p.to_dict() for p in result.publications], indent=2))
+        click.echo(json.dumps([p.model_dump() for p in papers], indent=2, default=str))
     elif output == "bibtex":
-        for pub in result.publications:
+        for pub in papers:
             click.echo(pub.to_bibtex())
             click.echo()
     else:
-        click.echo(f"Found {result.total_count} papers:\n")
-        for i, pub in enumerate(result.publications, 1):
+        click.echo(f"Found {len(papers)} papers:\n")
+        for i, pub in enumerate(papers, 1):
             _print_paper(i, pub)
 
 
@@ -141,7 +142,7 @@ def lookup(
         sys.exit(1)
     
     if output == "json":
-        click.echo(json.dumps(paper.to_dict(), indent=2))
+        click.echo(json.dumps(paper.model_dump(), indent=2, default=str))
     elif output == "bibtex":
         click.echo(paper.to_bibtex())
     else:
@@ -159,14 +160,19 @@ def ask(ctx: click.Context, query: str, limit: int) -> None:
     """
     forge = Forge(config=ctx.obj["config"])
     
-    result = forge.ask(query, context_limit=limit)
+    result = forge.ask(query, max_sources=limit)
     
-    click.echo(f"\n{result['answer']}\n")
+    click.echo(f"\n{result.answer}\n")
     
-    if result.get("sources"):
+    if result.sources:
         click.echo("Sources:")
-        for src in result["sources"]:
+        for src in result.sources:
             click.echo(f"  - {src.get('title', 'Unknown')}")
+    
+    if result.related_questions:
+        click.echo("\nRelated questions:")
+        for q in result.related_questions:
+            click.echo(f"  - {q}")
 
 
 @cli.command()
@@ -189,9 +195,9 @@ def index(
     click.echo(f"Searching for papers matching: {query}")
     result = forge.search(query, limit=limit)
     
-    click.echo(f"Found {len(result.publications)} papers. Indexing...")
+    click.echo(f"Found {len(result)} papers. Indexing...")
     
-    chunks = forge.index(result.publications, include_fulltext=fulltext)
+    chunks = forge.index(result, include_full_text=fulltext)
     
     click.echo(f"Indexed {chunks} chunks into knowledge base.")
 
@@ -218,7 +224,7 @@ def chat(ctx: click.Context) -> None:
             break
         
         result = forge.chat(message)
-        click.echo(f"\nAssistant: {result['response']}\n")
+        click.echo(f"\nAssistant: {result.response}\n")
 
 
 @cli.command()
@@ -231,6 +237,132 @@ def clear(ctx: click.Context) -> None:
         forge.clear_knowledge()
         click.echo("Knowledge base cleared.")
 
+
+@cli.command()
+@click.argument("doi")
+@click.option("--depth", "-d", default=2, help="Citation traversal depth")
+@click.option("--max-papers", "-n", default=100, help="Maximum papers to include")
+@click.option(
+    "--direction",
+    type=click.Choice(["both", "cited_by", "references"]),
+    default="both",
+    help="Citation direction to traverse",
+)
+@click.option("--output", "-o", type=click.Path(), help="Output file path (JSON or GraphML)")
+@click.pass_context
+def network(
+    ctx: click.Context,
+    doi: str,
+    depth: int,
+    max_papers: int,
+    direction: str,
+    output: Optional[str],
+) -> None:
+    """Build a citation network from a seed paper.
+    
+    Example: litforge network "10.1038/nature14539" --depth 2 --output network.json
+    """
+    forge = Forge(config=ctx.obj["config"])
+    
+    click.echo(f"Looking up paper: {doi}")
+    paper = forge.lookup(doi=doi)
+    
+    if not paper:
+        click.echo(f"Paper not found: {doi}", err=True)
+        sys.exit(1)
+    
+    click.echo(f"Building citation network (depth={depth}, max={max_papers})...")
+    network = forge.build_network(
+        [paper],
+        depth=depth,
+        max_papers=max_papers,
+        direction=direction,
+    )
+    
+    # Get stats
+    stats = forge.get_network_stats(network)
+    
+    click.echo(f"\nNetwork Statistics:")
+    click.echo(f"  Papers: {stats['node_count']}")
+    click.echo(f"  Citations: {stats['edge_count']}")
+    click.echo(f"  Clusters: {stats['cluster_count']}")
+    click.echo(f"  Density: {stats['density']}")
+    if stats.get('year_range'):
+        click.echo(f"  Year range: {stats['year_range'][0]} - {stats['year_range'][1]}")
+    
+    # Find key papers
+    key_papers = forge.find_key_papers(network, limit=5)
+    if key_papers:
+        click.echo(f"\nTop 5 Key Papers:")
+        for i, p in enumerate(key_papers, 1):
+            click.echo(f"  {i}. {p.title[:60]}...")
+    
+    # Export if requested
+    if output:
+        output_path = Path(output)
+        if output_path.suffix == ".graphml":
+            forge.export_network(network, output, format="graphml")
+        else:
+            forge.export_network(network, output, format="json")
+        click.echo(f"\nNetwork exported to: {output}")
+
+
+@cli.command()
+@click.argument("identifier")
+@click.option("--with-sections/--no-sections", default=True, help="Include section parsing")
+@click.option("--output", "-o", type=click.Path(), help="Save full text to file")
+@click.pass_context
+def retrieve(
+    ctx: click.Context,
+    identifier: str,
+    with_sections: bool,
+    output: Optional[str],
+) -> None:
+    """Retrieve and extract text from a paper.
+    
+    Example: litforge retrieve "1706.03762" --with-sections
+    """
+    forge = Forge(config=ctx.obj["config"])
+    
+    click.echo(f"Retrieving paper: {identifier}")
+    
+    try:
+        if with_sections:
+            paper = forge.retrieve_with_sections(identifier)
+        else:
+            paper = forge.lookup(doi=identifier) or forge.lookup(arxiv_id=identifier)
+            if paper:
+                paper = forge.retrieve(paper)
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
+    
+    if not paper:
+        click.echo(f"Paper not found: {identifier}", err=True)
+        sys.exit(1)
+    
+    click.echo(f"\nTitle: {paper.title}")
+    
+    if paper.full_text:
+        click.echo(f"Full text: {len(paper.full_text)} characters")
+        
+        if paper.sections:
+            click.echo(f"\nSections found: {list(paper.sections.keys())}")
+            for name, content in paper.sections.items():
+                preview = content[:100].replace('\n', ' ').strip()
+                click.echo(f"  - {name}: {preview}...")
+        
+        if output:
+            with open(output, 'w') as f:
+                f.write(f"# {paper.title}\n\n")
+                if paper.sections:
+                    for name, content in paper.sections.items():
+                        f.write(f"## {name.upper()}\n\n{content}\n\n")
+                else:
+                    f.write(paper.full_text)
+            click.echo(f"\nSaved to: {output}")
+    else:
+        click.echo("No full text available.")
 
 def _print_paper(
     num: int,
