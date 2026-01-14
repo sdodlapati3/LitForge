@@ -159,3 +159,6 @@ data/
 vectors/
 cache/
 downloads/
+logs/
+demo_*.py
+search_*.py
