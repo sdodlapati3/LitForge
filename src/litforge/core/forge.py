@@ -118,10 +118,7 @@ class Forge:
         """Get citation service."""
         if self._citation is None:
             from litforge.services.citation import CitationService
-            self._citation = CitationService(
-                config=self.config,
-                discovery=self.discovery,
-            )
+            self._citation = CitationService(config=self.config)
         return self._citation
     
     @property
@@ -137,10 +134,7 @@ class Forge:
         """Get Q&A service."""
         if self._qa is None:
             from litforge.services.qa import QAService
-            self._qa = QAService(
-                config=self.config,
-                knowledge=self.knowledge,
-            )
+            self._qa = QAService(config=self.config)
         return self._qa
     
     # =========================================================================
@@ -278,6 +272,30 @@ class Forge:
             extract_text=extract_text,
         )
     
+    def retrieve_with_sections(
+        self,
+        paper: Publication | str,
+    ) -> Publication:
+        """
+        Retrieve full content with section parsing.
+        
+        Downloads PDF and extracts text with structured sections
+        (Abstract, Introduction, Methods, Results, Discussion, etc.)
+        
+        Args:
+            paper: Publication object or DOI/ID
+            
+        Returns:
+            Publication with full_text and sections populated
+            
+        Example:
+            >>> paper = forge.lookup(doi="10.1038/nature12373")
+            >>> paper = forge.retrieve_with_sections(paper)
+            >>> print(paper.sections.get("abstract"))
+            >>> print(paper.sections.get("methods"))
+        """
+        return self.retrieval.retrieve_with_sections(paper)
+    
     def retrieve_batch(
         self,
         papers: Sequence[Publication],
@@ -355,6 +373,78 @@ class Forge:
         """
         return self.citation.find_clusters(network, algorithm=algorithm)
     
+    def find_key_papers(
+        self,
+        network: CitationNetwork,
+        metric: str = "pagerank",
+        limit: int = 10,
+    ) -> list[Publication]:
+        """
+        Find the most important papers in a citation network.
+        
+        Args:
+            network: Citation network to analyze
+            metric: Ranking metric ("pagerank", "citations", "in_degree")
+            limit: Number of papers to return
+            
+        Returns:
+            List of key papers
+        """
+        return self.citation.find_key_papers(network, metric=metric, limit=limit)
+    
+    def find_bridge_papers(
+        self,
+        network: CitationNetwork,
+        limit: int = 10,
+    ) -> list[Publication]:
+        """
+        Find bridge papers that connect different clusters.
+        
+        Args:
+            network: Citation network with clusters
+            limit: Number of papers to return
+            
+        Returns:
+            List of bridge papers
+        """
+        return self.citation.find_bridge_papers(network, limit=limit)
+    
+    def get_network_stats(
+        self,
+        network: CitationNetwork,
+    ) -> dict:
+        """
+        Get statistics about a citation network.
+        
+        Args:
+            network: Citation network
+            
+        Returns:
+            Dictionary with network statistics
+        """
+        return self.citation.get_network_stats(network)
+    
+    def export_network(
+        self,
+        network: CitationNetwork,
+        path: str,
+        format: str = "json",
+    ) -> None:
+        """
+        Export citation network to file.
+        
+        Args:
+            network: Citation network to export
+            path: Output file path
+            format: Export format ("json", "graphml")
+        """
+        if format == "json":
+            self.citation.export_json(network, path)
+        elif format == "graphml":
+            self.citation.export_graphml(network, path)
+        else:
+            raise ValueError(f"Unknown export format: {format}")
+    
     # =========================================================================
     # Knowledge Base Methods
     # =========================================================================
@@ -386,9 +476,8 @@ class Forge:
         """
         return self.knowledge.index(
             papers,
-            include_full_text=include_full_text,
-            batch_size=batch_size,
-            progress=progress,
+            include_fulltext=include_full_text,
+            section_aware=True,
         )
     
     def search_knowledge(
@@ -396,20 +485,47 @@ class Forge:
         query: str,
         *,
         limit: int = 10,
-        threshold: float = 0.0,
-    ) -> list[tuple[Publication, float]]:
+        section_filter: str | list[str] | None = None,
+    ) -> list[dict]:
         """
-        Search the knowledge base for relevant papers.
+        Search the knowledge base for relevant chunks.
         
         Args:
             query: Search query
             limit: Maximum results
-            threshold: Minimum similarity score
+            section_filter: Filter by section(s) (e.g., "methods", ["abstract", "results"])
             
         Returns:
-            List of (Publication, score) tuples
+            List of matching chunks with metadata and scores
         """
-        return self.knowledge.search(query, limit=limit, threshold=threshold)
+        return self.knowledge.search(query, limit=limit, section_filter=section_filter)
+    
+    def hybrid_search_knowledge(
+        self,
+        query: str,
+        *,
+        limit: int = 10,
+        semantic_weight: float = 0.7,
+        keyword_weight: float = 0.3,
+    ) -> list[dict]:
+        """
+        Perform hybrid search combining semantic and keyword matching.
+        
+        Args:
+            query: Search query
+            limit: Maximum results
+            semantic_weight: Weight for semantic similarity (0-1)
+            keyword_weight: Weight for keyword matching (0-1)
+            
+        Returns:
+            List of matching chunks with combined scores
+        """
+        return self.knowledge.hybrid_search(
+            query,
+            limit=limit,
+            semantic_weight=semantic_weight,
+            keyword_weight=keyword_weight,
+        )
     
     def clear_knowledge(self) -> None:
         """Clear the knowledge base."""
@@ -424,15 +540,15 @@ class Forge:
         question: str,
         *,
         max_sources: int = 5,
-        include_citations: bool = True,
+        generate_follow_ups: bool = False,
     ) -> Any:  # Returns QAResponse
         """
         Ask a question about the indexed literature.
         
         Args:
             question: Natural language question
-            max_sources: Maximum papers to use as context
-            include_citations: Include citation references
+            max_sources: Maximum context chunks to retrieve
+            generate_follow_ups: Generate related follow-up questions
             
         Returns:
             QAResponse with answer text and source citations
@@ -440,32 +556,54 @@ class Forge:
         Example:
             >>> forge.index(papers)
             >>> answer = forge.ask("What are the mechanisms of CRISPR?")
-            >>> print(answer.text)
-            >>> print(answer.citations)
+            >>> print(answer.answer)
+            >>> print(answer.sources)
         """
         return self.qa.ask(
             question,
-            max_sources=max_sources,
-            include_citations=include_citations,
+            context_limit=max_sources,
+            generate_follow_ups=generate_follow_ups,
         )
     
     def chat(
         self,
         message: str,
         *,
-        session_id: str | None = None,
+        use_context: bool = True,
     ) -> Any:  # Returns ChatResponse
         """
         Multi-turn chat about the indexed literature.
         
         Args:
             message: User message
-            session_id: Session ID for conversation continuity
+            use_context: Whether to retrieve relevant context
             
         Returns:
-            ChatResponse with answer and session info
+            ChatResponse with response and session info
         """
-        return self.qa.chat(message, session_id=session_id)
+        return self.qa.chat(message, use_context=use_context)
+    
+    def compare(
+        self,
+        papers: Sequence[Publication],
+    ) -> Any:  # Returns ComparisonResult
+        """
+        Compare multiple papers to identify similarities and differences.
+        
+        Args:
+            papers: Papers to compare (2-5 papers recommended)
+            
+        Returns:
+            ComparisonResult with summary, similarities, and differences
+            
+        Example:
+            >>> paper1 = forge.lookup(doi="10.1234/paper1")
+            >>> paper2 = forge.lookup(doi="10.1234/paper2")
+            >>> result = forge.compare([paper1, paper2])
+            >>> print(result.similarities)
+            >>> print(result.differences)
+        """
+        return self.qa.compare(papers)
     
     def summarize(
         self,
