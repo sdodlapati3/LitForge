@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "litforge"
-version = "0.1.0"
+version = "0.2.0"
 description = "Forging Knowledge from Literature - Unified scientific literature search, retrieval, and knowledge synthesis"
 readme = "README.md"
 license = "MIT"

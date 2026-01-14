@@ -50,9 +50,12 @@ from litforge.services.discovery import DiscoveryService
 from litforge.services.retrieval import RetrievalService
 from litforge.services.citation import CitationService
 from litforge.services.knowledge import KnowledgeService
-from litforge.services.qa import QAService
+from litforge.services.qa import QAService, QAResponse, ChatResponse, ComparisonResult
 
-__version__ = "0.1.0"
+# Processing (for PDF/text extraction)
+from litforge.processing import PDFExtractor, SectionParser, ReferenceExtractor
+
+__version__ = "0.2.0"
 __author__ = "Sribharath Kainkaryam"
 __email__ = "sdodlapati3@gmail.com"
 
@@ -83,4 +86,12 @@ __all__ = [
     "CitationService",
     "KnowledgeService",
     "QAService",
+    "QAResponse",
+    "ChatResponse",
+    "ComparisonResult",
+    
+    # Processing
+    "PDFExtractor",
+    "SectionParser",
+    "ReferenceExtractor",
 ]
