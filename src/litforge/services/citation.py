@@ -6,8 +6,10 @@ Builds and analyzes citation networks, finding clusters and key papers.
 
 from __future__ import annotations
 
+import json
 import logging
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Sequence
 
 from litforge.config import LitForgeConfig, get_config
@@ -135,7 +137,7 @@ class CitationService:
                 publication=pub,
                 in_degree=0,
                 out_degree=0,
-                centrality=0.0,
+                pagerank=0.0,
             )
             for pid, pub in all_papers.items()
         ]
@@ -151,7 +153,6 @@ class CitationService:
                         source=source,
                         target=target,
                         weight=1.0,
-                        edge_type=edge_type,
                     )
                 )
                 node_map[source].out_degree += 1
@@ -163,9 +164,12 @@ class CitationService:
         # Find clusters
         clusters = self._find_clusters(nodes, network_edges)
         
+        # Convert nodes list to dict
+        nodes_dict = {n.id: n for n in nodes}
+        
         return CitationNetwork(
-            seed_papers=[self._get_paper_id(p) for p in papers],
-            nodes=nodes,
+            seed_ids=[self._get_paper_id(p) for p in papers],
+            nodes=nodes_dict,
             edges=network_edges,
             clusters=clusters,
         )
@@ -187,18 +191,23 @@ class CitationService:
         Returns:
             List of key papers
         """
-        if metric == "centrality":
-            sorted_nodes = sorted(network.nodes, key=lambda n: n.centrality, reverse=True)
+        nodes = list(network.nodes.values())
+        if metric == "centrality" or metric == "pagerank":
+            sorted_nodes = sorted(
+                nodes,
+                key=lambda n: n.pagerank or 0.0,
+                reverse=True,
+            )
         elif metric == "citations":
             sorted_nodes = sorted(
-                network.nodes,
-                key=lambda n: n.publication.citation_count,
+                nodes,
+                key=lambda n: n.publication.citation_count if n.publication else 0,
                 reverse=True,
             )
         elif metric == "in_degree":
-            sorted_nodes = sorted(network.nodes, key=lambda n: n.in_degree, reverse=True)
+            sorted_nodes = sorted(nodes, key=lambda n: n.in_degree, reverse=True)
         else:
-            sorted_nodes = network.nodes
+            sorted_nodes = nodes
         
         return [n.publication for n in sorted_nodes[:limit]]
     
@@ -223,15 +232,41 @@ class CitationService:
         """Get a unique identifier for a paper."""
         return paper.doi or paper.openalex_id or paper.semantic_scholar_id or paper.title
     
+    def _get_ss_paper_id(self, paper: Publication) -> str | None:
+        """Get the Semantic Scholar paper ID or DOI formatted for SS API."""
+        if paper.semantic_scholar_id:
+            return paper.semantic_scholar_id
+        if paper.doi:
+            return f"DOI:{paper.doi}"
+        if paper.arxiv_id:
+            return f"arXiv:{paper.arxiv_id}"
+        if paper.pmid:
+            return f"PMID:{paper.pmid}"
+        return None
+    
     def _get_citing_papers(self, paper: Publication) -> list[Publication]:
-        """Get papers that cite this paper."""
+        """Get papers that cite this paper. Prefers OpenAlex, falls back to Semantic Scholar."""
+        # Try OpenAlex first (more complete coverage)
+        if paper.openalex_id:
+            try:
+                from litforge.clients.openalex import OpenAlexClient
+                client = OpenAlexClient(email=self.config.sources.openalex_email)
+                return client.get_citations(paper.openalex_id, limit=50)
+            except Exception as e:
+                logger.debug(f"OpenAlex citations failed: {e}")
+        
+        # Fall back to Semantic Scholar
+        paper_id = self._get_ss_paper_id(paper)
+        if not paper_id:
+            return []
+        
         try:
             from litforge.clients.semantic_scholar import SemanticScholarClient
             client = SemanticScholarClient(
                 api_key=self.config.sources.semantic_scholar_api_key
             )
             return client.get_citations(
-                paper_id=paper.semantic_scholar_id or paper.doi,
+                paper_id=paper_id,
                 limit=50,
             )
         except Exception as e:
@@ -239,14 +274,28 @@ class CitationService:
             return []
     
     def _get_referenced_papers(self, paper: Publication) -> list[Publication]:
-        """Get papers referenced by this paper."""
+        """Get papers referenced by this paper. Prefers OpenAlex, falls back to Semantic Scholar."""
+        # Try OpenAlex first (more complete coverage)
+        if paper.openalex_id:
+            try:
+                from litforge.clients.openalex import OpenAlexClient
+                client = OpenAlexClient(email=self.config.sources.openalex_email)
+                return client.get_references(paper.openalex_id, limit=50)
+            except Exception as e:
+                logger.debug(f"OpenAlex references failed: {e}")
+        
+        # Fall back to Semantic Scholar
+        paper_id = self._get_ss_paper_id(paper)
+        if not paper_id:
+            return []
+        
         try:
             from litforge.clients.semantic_scholar import SemanticScholarClient
             client = SemanticScholarClient(
                 api_key=self.config.sources.semantic_scholar_api_key
             )
             return client.get_references(
-                paper_id=paper.semantic_scholar_id or paper.doi,
+                paper_id=paper_id,
                 limit=50,
             )
         except Exception as e:
@@ -272,14 +321,14 @@ class CitationService:
                 pagerank = nx.pagerank(G, alpha=0.85)
                 
                 for node in nodes:
-                    node.centrality = pagerank.get(node.id, 0.0)
+                    node.pagerank = pagerank.get(node.id, 0.0)
                     
         except ImportError:
             logger.warning("NetworkX not installed - centrality not computed")
             # Fall back to simple degree centrality
             total_edges = len(edges) or 1
             for node in nodes:
-                node.centrality = (node.in_degree + node.out_degree) / total_edges
+                node.pagerank = (node.in_degree + node.out_degree) / total_edges
     
     def _find_clusters(
         self,
@@ -328,12 +377,12 @@ class CitationService:
                     continue
                 
                 # Find most central node as representative
-                representative = max(members, key=lambda n: n.centrality)
+                representative = max(members, key=lambda n: n.pagerank or 0.0)
                 
                 # Extract common keywords for label
                 all_keywords: list[str] = []
                 for m in members:
-                    if m.publication.keywords:
+                    if m.publication and m.publication.keywords:
                         all_keywords.extend(m.publication.keywords)
                 
                 # Get top keywords
@@ -364,3 +413,228 @@ class CitationService:
         except ImportError:
             logger.warning("NetworkX not installed - clustering not available")
             return []
+    
+    def find_bridge_papers(
+        self,
+        network: CitationNetwork,
+        limit: int = 10,
+    ) -> list[Publication]:
+        """
+        Find bridge papers that connect different clusters.
+        
+        These papers cite or are cited by papers from multiple clusters,
+        making them important for understanding cross-topic connections.
+        
+        Args:
+            network: Citation network with clusters
+            limit: Maximum papers to return
+            
+        Returns:
+            List of bridge papers
+        """
+        if not network.clusters or len(network.clusters) < 2:
+            return []
+        
+        # Build cluster membership map
+        node_to_cluster: dict[str, str] = {}
+        for cluster in network.clusters:
+            for member_id in cluster.members:
+                node_to_cluster[member_id] = cluster.id
+        
+        # Count cross-cluster connections for each node
+        bridge_scores: dict[str, int] = defaultdict(int)
+        
+        for edge in network.edges:
+            source_cluster = node_to_cluster.get(edge.source)
+            target_cluster = node_to_cluster.get(edge.target)
+            
+            if source_cluster and target_cluster and source_cluster != target_cluster:
+                bridge_scores[edge.source] += 1
+                bridge_scores[edge.target] += 1
+        
+        # Sort by bridge score
+        sorted_nodes = sorted(
+            bridge_scores.items(),
+            key=lambda x: x[1],
+            reverse=True,
+        )
+        
+        # Get publications
+        bridge_papers = []
+        for node_id, score in sorted_nodes[:limit]:
+            if node_id in network.nodes:
+                bridge_papers.append(network.nodes[node_id].publication)
+        
+        return bridge_papers
+    
+    def get_citation_timeline(
+        self,
+        network: CitationNetwork,
+    ) -> dict[int, list[Publication]]:
+        """
+        Get papers grouped by publication year.
+        
+        Args:
+            network: Citation network
+            
+        Returns:
+            Dict mapping year to list of publications
+        """
+        timeline: dict[int, list[Publication]] = defaultdict(list)
+        
+        for node in network.nodes.values():
+            if node.publication and node.publication.year:
+                timeline[node.publication.year].append(node.publication)
+        
+        # Sort by year
+        return dict(sorted(timeline.items()))
+    
+    def export_json(
+        self,
+        network: CitationNetwork,
+        path: str | Path,
+    ) -> None:
+        """
+        Export network to JSON format.
+        
+        Args:
+            network: Citation network
+            path: Output file path
+        """
+        data = {
+            "nodes": [
+                {
+                    "id": node.id,
+                    "title": node.publication.title if node.publication else "",
+                    "authors": [a.name for a in node.publication.authors[:5]] if node.publication else [],
+                    "year": node.publication.year if node.publication else None,
+                    "doi": node.publication.doi if node.publication else None,
+                    "citations": node.publication.citation_count if node.publication else 0,
+                    "in_degree": node.in_degree,
+                    "out_degree": node.out_degree,
+                    "pagerank": node.pagerank,
+                }
+                for node in network.nodes.values()
+            ],
+            "edges": [
+                {
+                    "source": edge.source,
+                    "target": edge.target,
+                    "weight": edge.weight,
+                }
+                for edge in network.edges
+            ],
+            "clusters": [
+                {
+                    "id": cluster.id,
+                    "label": cluster.label,
+                    "members": cluster.members,
+                    "keywords": cluster.keywords,
+                }
+                for cluster in network.clusters
+            ],
+        }
+        
+        Path(path).write_text(json.dumps(data, indent=2))
+        logger.info(f"Exported network to {path}")
+    
+    def export_graphml(
+        self,
+        network: CitationNetwork,
+        path: str | Path,
+    ) -> None:
+        """
+        Export network to GraphML format for Gephi/Cytoscape.
+        
+        Args:
+            network: Citation network
+            path: Output file path
+        """
+        try:
+            import networkx as nx
+            
+            G = nx.DiGraph()
+            
+            # Add nodes with attributes
+            for node in network.nodes.values():
+                attrs = {
+                    "title": node.publication.title if node.publication else "",
+                    "year": node.publication.year if node.publication else 0,
+                    "citations": node.publication.citation_count if node.publication else 0,
+                    "in_degree": node.in_degree,
+                    "out_degree": node.out_degree,
+                    "pagerank": node.pagerank,
+                }
+                if node.publication and node.publication.doi:
+                    attrs["doi"] = node.publication.doi
+                
+                G.add_node(node.id, **attrs)
+            
+            # Add edges
+            for edge in network.edges:
+                G.add_edge(edge.source, edge.target, weight=edge.weight)
+            
+            # Write to file
+            nx.write_graphml(G, str(path))
+            logger.info(f"Exported network to {path}")
+            
+        except ImportError:
+            raise ImportError("NetworkX is required for GraphML export. Install with: pip install networkx")
+    
+    def get_network_stats(
+        self,
+        network: CitationNetwork,
+    ) -> dict[str, Any]:
+        """
+        Get statistics about the citation network.
+        
+        Args:
+            network: Citation network
+            
+        Returns:
+            Dictionary of network statistics
+        """
+        nodes = list(network.nodes.values())
+        
+        if not nodes:
+            return {
+                "node_count": 0,
+                "edge_count": 0,
+                "density": 0.0,
+            }
+        
+        # Basic stats
+        node_count = len(nodes)
+        edge_count = len(network.edges)
+        
+        # Density
+        max_edges = node_count * (node_count - 1)
+        density = edge_count / max_edges if max_edges > 0 else 0.0
+        
+        # Degree stats
+        in_degrees = [n.in_degree for n in nodes]
+        out_degrees = [n.out_degree for n in nodes]
+        
+        # Year range
+        years = [n.publication.year for n in nodes if n.publication and n.publication.year]
+        
+        # Citation stats
+        citations = [
+            n.publication.citation_count
+            for n in nodes
+            if n.publication and n.publication.citation_count
+        ]
+        
+        return {
+            "node_count": node_count,
+            "edge_count": edge_count,
+            "cluster_count": len(network.clusters),
+            "density": round(density, 4),
+            "avg_in_degree": round(sum(in_degrees) / node_count, 2),
+            "avg_out_degree": round(sum(out_degrees) / node_count, 2),
+            "max_in_degree": max(in_degrees) if in_degrees else 0,
+            "max_out_degree": max(out_degrees) if out_degrees else 0,
+            "year_range": (min(years), max(years)) if years else None,
+            "total_citations": sum(citations) if citations else 0,
+            "avg_citations": round(sum(citations) / len(citations), 1) if citations else 0,
+        }
