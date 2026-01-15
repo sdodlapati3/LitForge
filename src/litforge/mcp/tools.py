@@ -47,6 +47,67 @@ class LitForgeTools:
         """
         return [
             {
+                "name": "smart_search",
+                "description": (
+                    "Intelligent literature search that handles natural language queries. "
+                    "The AI assistant should use this tool when the user asks a question-style "
+                    "query or uses informal language. The assistant should:\n"
+                    "1. Parse the user's intent\n"
+                    "2. Expand terminology (e.g., 'liquid foundation models' → 'Liquid Neural Networks', "
+                    "'Liquid Time-constant Networks', 'CfC networks')\n"
+                    "3. Provide multiple search_queries to cover synonyms and related terms\n"
+                    "4. Set appropriate filters\n\n"
+                    "This enables semantic understanding that keyword search cannot provide."
+                ),
+                "inputSchema": {
+                    "type": "object",
+                    "properties": {
+                        "search_queries": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "List of search queries to execute. Include the main query "
+                                "plus synonyms, alternative names, and related terms. "
+                                "Example: For 'liquid foundation models', use "
+                                "['Liquid Neural Networks', 'Liquid Time-constant Networks', "
+                                "'Closed-form continuous-time neural networks', 'CfC networks', "
+                                "'Ramin Hasani neural']"
+                            ),
+                        },
+                        "limit_per_query": {
+                            "type": "integer",
+                            "description": "Max results per query (default: 10)",
+                            "default": 10,
+                        },
+                        "year_from": {
+                            "type": "integer",
+                            "description": "Filter papers from this year",
+                        },
+                        "year_to": {
+                            "type": "integer",
+                            "description": "Filter papers until this year",
+                        },
+                        "must_contain": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "Terms that must appear in the paper title for it to be "
+                                "considered relevant. Use lowercase. Example: ['liquid', 'neural']"
+                            ),
+                        },
+                        "exclude_terms": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "Terms to exclude from results. Useful for filtering false positives. "
+                                "Example: ['ionic liquid', 'liquid crystal', 'liquid biopsy']"
+                            ),
+                        },
+                    },
+                    "required": ["search_queries"],
+                },
+            },
+            {
                 "name": "search_papers",
                 "description": (
                     "Search for scientific papers across multiple databases including "
@@ -293,6 +354,90 @@ class LitForgeTools:
             },
         ]
 
+    async def smart_search(
+        self,
+        search_queries: list[str],
+        limit_per_query: int = 10,
+        year_from: int | None = None,
+        year_to: int | None = None,
+        must_contain: list[str] | None = None,
+        exclude_terms: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Intelligent multi-query search with filtering.
+        
+        This tool enables Claude to expand queries semantically and filter
+        results for relevance.
+        """
+        try:
+            from litforge.clients import OpenAlexClient, ArxivClient
+            
+            oa = OpenAlexClient()
+            ax = ArxivClient()
+            
+            all_papers = []
+            
+            # Execute each query
+            for query in search_queries:
+                try:
+                    # Search OpenAlex
+                    results = oa.search(query, limit=limit_per_query)
+                    all_papers.extend(results)
+                except Exception as e:
+                    logger.debug(f"OpenAlex search failed for '{query}': {e}")
+                
+                try:
+                    # Search arXiv
+                    results = ax.search(query, limit=limit_per_query // 2)
+                    all_papers.extend(results)
+                except Exception as e:
+                    logger.debug(f"arXiv search failed for '{query}': {e}")
+            
+            # Deduplicate by title
+            seen_titles = set()
+            unique_papers = []
+            for p in all_papers:
+                title_norm = p.title.lower().strip()[:80]
+                if title_norm not in seen_titles:
+                    seen_titles.add(title_norm)
+                    unique_papers.append(p)
+            
+            # Filter by must_contain terms
+            if must_contain:
+                must_contain_lower = [t.lower() for t in must_contain]
+                unique_papers = [
+                    p for p in unique_papers
+                    if any(term in p.title.lower() for term in must_contain_lower)
+                ]
+            
+            # Filter out exclude_terms
+            if exclude_terms:
+                exclude_lower = [t.lower() for t in exclude_terms]
+                unique_papers = [
+                    p for p in unique_papers
+                    if not any(term in p.title.lower() for term in exclude_lower)
+                ]
+            
+            # Filter by year
+            if year_from:
+                unique_papers = [p for p in unique_papers if p.year and p.year >= year_from]
+            if year_to:
+                unique_papers = [p for p in unique_papers if p.year and p.year <= year_to]
+            
+            # Sort by citations
+            unique_papers.sort(key=lambda x: x.citation_count, reverse=True)
+            
+            return {
+                "success": True,
+                "query_count": len(search_queries),
+                "total_found": len(unique_papers),
+                "papers": [self._paper_to_dict(p) for p in unique_papers[:50]],
+            }
+            
+        except Exception as e:
+            logger.error(f"Smart search failed: {e}")
+            return {"success": False, "error": str(e)}
+
     async def search_papers(
         self,
         query: str,
@@ -304,7 +449,7 @@ class LitForgeTools:
     ) -> dict[str, Any]:
         """Search for papers."""
         try:
-            papers = await self.forge.search(
+            papers = self.forge.search(
                 query=query,
                 limit=limit,
                 sources=sources,
@@ -461,15 +606,23 @@ class LitForgeTools:
             return {"success": False, "error": str(e)}
 
     def _paper_to_dict(self, paper: Any) -> dict[str, Any]:
-        """Convert a Paper object to a dictionary."""
+        """Convert a Paper/Publication object to a dictionary."""
+        # Handle both Publication model and simple Paper objects
+        authors = []
+        if hasattr(paper, 'authors') and paper.authors:
+            if hasattr(paper.authors[0], 'name'):
+                authors = [a.name for a in paper.authors]
+            else:
+                authors = list(paper.authors)
+        
         return {
-            "doi": paper.doi,
-            "title": paper.title,
-            "authors": [a.name for a in paper.authors] if paper.authors else [],
-            "abstract": paper.abstract,
-            "year": paper.year,
-            "venue": paper.venue,
-            "citation_count": paper.citation_count,
-            "open_access": paper.open_access,
-            "url": paper.url,
+            "doi": getattr(paper, 'doi', None),
+            "title": getattr(paper, 'title', 'Unknown'),
+            "authors": authors,
+            "abstract": getattr(paper, 'abstract', None),
+            "year": getattr(paper, 'year', None),
+            "venue": getattr(paper, 'venue', None),
+            "citation_count": getattr(paper, 'citation_count', 0),
+            "open_access": getattr(paper, 'is_open_access', getattr(paper, 'open_access', False)),
+            "url": getattr(paper, 'url', None),
         }

@@ -65,7 +65,9 @@ def create_server(forge: Any = None) -> Any:
         """Execute a LitForge tool."""
         try:
             # Route to appropriate tool method
-            if name == "search_papers":
+            if name == "smart_search":
+                result = await tools.smart_search(**arguments)
+            elif name == "search_papers":
                 result = await tools.search_papers(**arguments)
             elif name == "lookup_paper":
                 result = await tools.lookup_paper(**arguments)
