@@ -121,8 +121,14 @@ class LitForgeClient:
         }
         sort_param = sort_map.get(sort_by, "cited_by_count:desc")
         
-        # Build year filter
+        # Build filters
         filters = []
+        
+        # Use title.search for better precision
+        # OpenAlex's fulltext search often returns irrelevant results
+        filters.append(f"title.search:{query}")
+        
+        # Year filters
         if year_from and year_to:
             filters.append(f"publication_year:{year_from}-{year_to}")
         elif year_from:
@@ -132,17 +138,28 @@ class LitForgeClient:
         
         async with httpx.AsyncClient(timeout=30) as client:
             params = {
-                "search": query,
+                "filter": ",".join(filters),
                 "per_page": min(limit, 100),
                 "sort": sort_param,
             }
-            if filters:
-                params["filter"] = ",".join(filters)
             
             resp = await client.get("https://api.openalex.org/works", params=params)
             data = resp.json()
             
-            return [self._parse_openalex_work(work) for work in data.get("results", [])][:limit]
+            results = [self._parse_openalex_work(work) for work in data.get("results", [])][:limit]
+            
+            # If no results with title search, fall back to fulltext search
+            if not results:
+                params = {
+                    "search": query,
+                    "per_page": min(limit, 100),
+                    "sort": sort_param,
+                }
+                resp = await client.get("https://api.openalex.org/works", params=params)
+                data = resp.json()
+                results = [self._parse_openalex_work(work) for work in data.get("results", [])][:limit]
+            
+            return results
     
     def lookup(self, doi: str) -> Optional[Paper]:
         """
