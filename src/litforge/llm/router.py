@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class CerebrasProvider(BaseLLM):
     """Cerebras Cloud - 14,400 req/day FREE (most generous)."""
     
-    def __init__(self, api_key: str | None = None, model: str = "llama3.1-8b"):
+    def __init__(self, api_key: str | None = None, model: str = "llama-3.3-70b"):
         self.api_key = api_key or os.environ.get("CEREBRAS_API_KEY")
         self.model = model
         self._client = None
@@ -65,7 +65,7 @@ class CerebrasProvider(BaseLLM):
 class GroqProvider(BaseLLM):
     """Groq Cloud - 1,000+ req/day FREE (fastest inference)."""
     
-    def __init__(self, api_key: str | None = None, model: str = "llama-3.1-8b-instant"):
+    def __init__(self, api_key: str | None = None, model: str = "llama-3.3-70b-versatile"):
         self.api_key = api_key or os.environ.get("GROQ_API_KEY")
         self.model = model
         self._client = None
