@@ -1,0 +1,1839 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "in_degree": 33,
+      "out_degree": 26,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Liquid Time-constant Networks",
+      "year": 2021,
+      "citations": 224,
+      "pagerank": 0.06207818954492359,
+      "id": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "in_degree": 22,
+      "out_degree": 21,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Closed-form continuous-time neural networks",
+      "year": 2022,
+      "citations": 126,
+      "pagerank": 0.07055966303392498,
+      "id": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "in_degree": 20,
+      "out_degree": 12,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Mechanistic artificial intelligence (mechanistic-AI) for modeling, design, and control of advanced manufacturing processes: Current state and perspectives",
+      "year": 2021,
+      "citations": 123,
+      "pagerank": 0.0886819423877215,
+      "id": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 6,
+      "depth": 0,
+      "is_seed": false,
+      "title": "BarrierNet: Differentiable Control Barrier Functions for Learning of Safe Robot Control",
+      "year": 2023,
+      "citations": 82,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1109/tro.2023.3249564"
+    },
+    {
+      "in_degree": 3,
+      "out_degree": 7,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Robust flight navigation out of distribution with liquid neural networks",
+      "year": 2023,
+      "citations": 64,
+      "pagerank": 0.010510489694802703,
+      "id": "10.1126/scirobotics.adc8892"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Accurate online training of dynamical spiking neural networks through Forward Propagation Through Time",
+      "year": 2023,
+      "citations": 54,
+      "pagerank": 0.006322733300539198,
+      "id": "10.1038/s42256-023-00650-4"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Whole-heart electromechanical simulations using Latent Neural Ordinary Differential Equations",
+      "year": 2024,
+      "citations": 29,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1038/s41746-024-01084-x"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A Survey on Collaborative Learning for Intelligent Autonomous Systems",
+      "year": 2023,
+      "citations": 25,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1145/3625544"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 4,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Micromechanics-based deep-learning for composites: Challenges and future perspectives",
+      "year": 2024,
+      "citations": 25,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.euromechsol.2024.105242"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Neural circuit policies-based temporal flexible soft-sensor modeling of subway PM2.5 with applications on indoor air quality management",
+      "year": 2021,
+      "citations": 24,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.buildenv.2021.108537"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Forecasting energy power consumption using federated learning in edge computing devices",
+      "year": 2023,
+      "citations": 24,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.iot.2023.101050"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A review of machine learning applications in power system protection and emergency control: opportunities, challenges, and future directions",
+      "year": 2024,
+      "citations": 24,
+      "pagerank": 0.004926814502451363,
+      "id": "10.3389/frsgr.2024.1371153"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Liquidt: stock market analysis using liquid time-constant neural networks",
+      "year": 2023,
+      "citations": 19,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1007/s41870-023-01506-1"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 4,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Efficient Edge-AI Models for Robust ECG Abnormality Detection on Resource-Constrained Hardware",
+      "year": 2024,
+      "citations": 17,
+      "pagerank": 0.007020692699583116,
+      "id": "10.1007/s12265-024-10504-y"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Sensor-based agitation prediction in institutionalized people with dementia A systematic review",
+      "year": 2024,
+      "citations": 15,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.pmcj.2024.101876"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Mamba-360: Survey of state space models as transformer alternative for long sequence modelling: Methods, Applications, and Challenges",
+      "year": 2025,
+      "citations": 12,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.engappai.2025.111279"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 5,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A survey on state-of-the-art deep learning applications and challenges",
+      "year": 2025,
+      "citations": 9,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.engappai.2025.111225"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "The influence of regional tourism economy development on carbon neutrality for environmental protection using improved recurrent neural network",
+      "year": 2023,
+      "citations": 8,
+      "pagerank": 0.004926814502451363,
+      "id": "10.3389/fevo.2023.1146887"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Digital Twin Smart City Visualization with MoE-Based Personal Thermal Comfort Analysis",
+      "year": 2025,
+      "citations": 6,
+      "pagerank": 0.004926814502451363,
+      "id": "10.3390/s25030705"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Neuromorphic computing for robotic vision: algorithms to hardware advances",
+      "year": 2025,
+      "citations": 6,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1038/s44172-025-00492-5"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Oscillations in an artificial neural network convert competing inputs into a temporal code",
+      "year": 2024,
+      "citations": 4,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1371/journal.pcbi.1012429"
+    },
+    {
+      "in_degree": 11,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Long Short-Term Memory",
+      "year": 1997,
+      "citations": 91772,
+      "pagerank": 0.03289715613098955,
+      "id": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Learning representations by back-propagating errors",
+      "year": 1986,
+      "citations": 29201,
+      "pagerank": 0.008402860272149993,
+      "id": "10.1038/323533a0"
+    },
+    {
+      "in_degree": 3,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "UCI Machine Learning Repository",
+      "year": 2007,
+      "citations": 24286,
+      "pagerank": 0.013995425490487478,
+      "id": "W3120740533"
+    },
+    {
+      "in_degree": 4,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Multilayer feedforward networks are universal approximators",
+      "year": 1989,
+      "citations": 20438,
+      "pagerank": 0.02026531845593206,
+      "id": "10.1016/0893-6080(89)90020-8"
+    },
+    {
+      "in_degree": 6,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Multilayer feedforward networks are universal approximators",
+      "year": 1989,
+      "citations": 9345,
+      "pagerank": 0.04308219964669323,
+      "id": "10.5555/70405.70408"
+    },
+    {
+      "in_degree": 3,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Dynamic causal modelling",
+      "year": 2003,
+      "citations": 4637,
+      "pagerank": 0.012351326725810765,
+      "id": "10.1016/s1053-8119(03)00202-7"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "MuJoCo: A physics engine for model-based control",
+      "year": 2012,
+      "citations": 4196,
+      "pagerank": 0.010564428629482165,
+      "id": "10.1109/iros.2012.6386109"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Mathematical Theory of Optimal Processes",
+      "year": 2018,
+      "citations": 3620,
+      "pagerank": 0.007565308993297293,
+      "id": "10.1201/9780203749319"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Numerical Recipes 3rd Edition: The Art of Scientific Computing",
+      "year": 2007,
+      "citations": 3439,
+      "pagerank": 0.007565308993297293,
+      "id": "W1738124305"
+    },
+    {
+      "in_degree": 4,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A family of embedded Runge-Kutta formulae",
+      "year": 1980,
+      "citations": 3435,
+      "pagerank": 0.020250008535620652,
+      "id": "10.1016/0771-050x(80)90013-3"
+    },
+    {
+      "in_degree": 4,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Recurrent Neural Networks for Multivariate Time Series with Missing Values",
+      "year": 2018,
+      "citations": 1946,
+      "pagerank": 0.018372422730374347,
+      "id": "10.1038/s41598-018-24271-9"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A public domain dataset for human activity recognition using smartphones",
+      "year": 2013,
+      "citations": 1691,
+      "pagerank": 0.007565308993297293,
+      "id": "W134960717"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Approximation of dynamical systems by continuous time recurrent neural networks",
+      "year": 1993,
+      "citations": 961,
+      "pagerank": 0.010564428629482165,
+      "id": "10.1016/s0893-6080(05)80125-x"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Learning Representations by Back-Propagating Errors",
+      "year": 2002,
+      "citations": 796,
+      "pagerank": 0.007565308993297293,
+      "id": "10.7551/mitpress/1888.003.0013"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Methods in Neuronal Modeling: From Ions to Networks",
+      "year": 1998,
+      "citations": 762,
+      "pagerank": 0.007565308993297293,
+      "id": "W1532842753"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Approximation by superpositions of a sigmoidal function",
+      "year": 1992,
+      "citations": 743,
+      "pagerank": 0.007565308993297293,
+      "id": "10.1007/bf02134016"
+    },
+    {
+      "in_degree": 3,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Recherches quantitatives sur l' excitation electrique des nerfs traitee comme une polarization.",
+      "year": 1907,
+      "citations": 559,
+      "pagerank": 0.009352207089625891,
+      "id": "W3217350819"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Accurate occupancy detection of an office room from light, temperature, humidity and CO 2 measurements using statistical learning models",
+      "year": 2015,
+      "citations": 557,
+      "pagerank": 0.007565308993297293,
+      "id": "10.1016/j.enbuild.2015.11.071"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A 3(2) pair of Runge - Kutta formulas",
+      "year": 1989,
+      "citations": 532,
+      "pagerank": 0.007565308993297293,
+      "id": "10.1016/0893-9659(89)90079-7"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "The Power of Depth for Feedforward Neural Networks",
+      "year": 2016,
+      "citations": 347,
+      "pagerank": 0.007565308993297293,
+      "id": "W2962742960"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A review on machine learning implementation for predicting and optimizing the mechanical behaviour of laminated fiber-reinforced polymer composites",
+      "year": 2024,
+      "citations": 42,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.heliyon.2024.e33681"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A guide to single-particle tracking",
+      "year": 2024,
+      "citations": 36,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1038/s43586-024-00341-3"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Robust Beamforming With Gradient-Based Liquid Neural Network",
+      "year": 2024,
+      "citations": 32,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1109/lwc.2024.3436576"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Artificial Intelligence for Control in Laser-Based Additive Manufacturing: A Systematic Review",
+      "year": 2025,
+      "citations": 17,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1109/access.2025.3537859"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 3,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation",
+      "year": 2024,
+      "citations": 12,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1093/pnasnexus/pgae488"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Translational network neuroscience: Nine roadblocks and possible solutions",
+      "year": 2025,
+      "citations": 4,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1162/netn_a_00435"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Deep Learning in Environmental Toxicology: Current Progress and Open Challenges",
+      "year": 2023,
+      "citations": 14,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1021/acsestwater.3c00152"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Enhanced multi-label cardiology diagnosis with channel-wise recurrent fusion",
+      "year": 2024,
+      "citations": 11,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.compbiomed.2024.108210"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Delay-dependent bifurcation conditions in a fractional-order inertial BAM neural network",
+      "year": 2024,
+      "citations": 10,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.chaos.2024.115106"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Machine Learning Best Practices for Soft Robot Proprioception",
+      "year": 2023,
+      "citations": 8,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1109/iros55552.2023.10342379"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Long-term prediction method for PM2.5 concentration using edge channel graph attention network and gating closed-form continuous-time neural networks",
+      "year": 2024,
+      "citations": 8,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.psep.2024.06.090"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Optimizing Plant Disease Classification with Hybrid Convolutional Neural Network\u2013Recurrent Neural Network and Liquid Time-Constant Network",
+      "year": 2024,
+      "citations": 7,
+      "pagerank": 0.004926814502451363,
+      "id": "10.3390/app14199118"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A closed-form continuous-depth neural-based hybrid difference features re-representation network for RUL prediction",
+      "year": 2024,
+      "citations": 7,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.ress.2024.110540"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Efficient Edge-AI Models for Robust ECG Abnormality Detection on Resource-Constrained Hardware",
+      "year": 2023,
+      "citations": 8,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1101/2023.08.31.23294925"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Cardiac abnormality detection with a tiny diagonal state space model based on sequential liquid neural processing unit",
+      "year": 2024,
+      "citations": 7,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1063/5.0191574"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Efficient learning in spiking neural networks",
+      "year": 2024,
+      "citations": 4,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.neucom.2024.127962"
+    },
+    {
+      "in_degree": 4,
+      "out_degree": 2,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations",
+      "year": 2018,
+      "citations": 13403,
+      "pagerank": 0.017349148743080186,
+      "id": "10.1016/j.jcp.2018.10.045"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Bidirectional recurrent neural networks",
+      "year": 1997,
+      "citations": 9488,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1109/78.650093"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Physics-informed machine learning",
+      "year": 2021,
+      "citations": 5105,
+      "pagerank": 0.014208331447382556,
+      "id": "10.1038/s42254-021-00314-5"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Absolute stability of global pattern formation and parallel memory storage by competitive neural networks",
+      "year": 1983,
+      "citations": 2521,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1109/tsmc.1983.6313075"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators",
+      "year": 2021,
+      "citations": 2154,
+      "pagerank": 0.008972873237202111,
+      "id": "10.1038/s42256-021-00302-5"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Differential Equations and Dynamical Systems",
+      "year": 1991,
+      "citations": 705,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1007/978-1-4684-0392-3"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A Comprehensive Review of Stability Analysis of Continuous-Time Recurrent Neural Networks",
+      "year": 2014,
+      "citations": 636,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1109/tnnls.2014.2317880"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A Proposal on Machine Learning via Dynamical Systems",
+      "year": 2017,
+      "citations": 617,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1007/s40304-017-0103-z"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Learning the solution operator of parametric partial differential equations with physics-informed DeepONets",
+      "year": 2021,
+      "citations": 574,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1126/sciadv.abi8605"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "PointFlow: 3D Point Cloud Generation With Continuous Normalizing Flows",
+      "year": 2019,
+      "citations": 556,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1109/iccv.2019.00464"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "High order embedded Runge-Kutta formulae",
+      "year": 1981,
+      "citations": 513,
+      "pagerank": 0.01114099238723133,
+      "id": "10.1016/0771-050x(81)90010-3"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Neural masses and fields in dynamic causal modeling",
+      "year": 2013,
+      "citations": 282,
+      "pagerank": 0.007925934138636235,
+      "id": "10.3389/fncom.2013.00057"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Nystr\u00f6mformer: A Nystr\u00f6m-based Algorithm for Approximating Self-Attention",
+      "year": 2021,
+      "citations": 274,
+      "pagerank": 0.007925934138636235,
+      "id": "10.1609/aaai.v35i16.17664"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Learning Robust Control Policies for End-to-End Autonomous Driving From Data-Driven Simulation",
+      "year": 2020,
+      "citations": 195,
+      "pagerank": 0.008763485417488937,
+      "id": "10.1109/lra.2020.2966414"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A State-of-the-Art Review on Machine Learning-Based Multiscale Modeling, Simulation, Homogenization and Design of Materials",
+      "year": 2022,
+      "citations": 162,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1007/s11831-022-09795-8"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Data\u2010Driven Design for Metamaterials and Multiscale Systems: A Review",
+      "year": 2023,
+      "citations": 155,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1002/adma.202305254"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Intelligent additive manufacturing and design: state of the art and future perspectives",
+      "year": 2022,
+      "citations": 116,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.addma.2022.103139"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Additive friction stir deposition of metallic materials: Process, structure and properties",
+      "year": 2023,
+      "citations": 103,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.matdes.2023.112356"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Is artificial intelligence associated with carbon emissions reduction? Case of China",
+      "year": 2023,
+      "citations": 99,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.resourpol.2023.103892"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Monitoring and prediction of porosity in laser powder bed fusion using physics-informed meltpool signatures and machine learning",
+      "year": 2022,
+      "citations": 94,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.jmatprotec.2022.117550"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Extreme gradient boosting-inspired process optimization algorithm for manufacturing engineering applications",
+      "year": 2023,
+      "citations": 57,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.matdes.2023.111625"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Human-machine collaborative additive manufacturing",
+      "year": 2022,
+      "citations": 46,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.jmsy.2022.12.004"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "State-of-art review on the process-structure-properties-performance linkage in wire arc additive manufacturing",
+      "year": 2024,
+      "citations": 46,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1080/17452759.2024.2390495"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "AI for tribology: Present and future",
+      "year": 2024,
+      "citations": 42,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1007/s40544-024-0879-2"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Data-driven prediction of tool wear using Bayesian regularized artificial neural networks",
+      "year": 2024,
+      "citations": 39,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.measurement.2024.115303"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Additive Manufacturing Modification by Artificial Intelligence, Machine Learning, and Deep Learning: A Review",
+      "year": 2025,
+      "citations": 34,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.amf.2025.200198"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Vision on metal additive manufacturing: Developments, challenges and future trends",
+      "year": 2023,
+      "citations": 33,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.cirpj.2023.08.005"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Manufacturing quality assessment in the industry 4.0 era: a review",
+      "year": 2023,
+      "citations": 31,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1080/14783363.2023.2194524"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Artificial intelligence in metal forming",
+      "year": 2024,
+      "citations": 31,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.cirp.2024.04.102"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Challenges and Opportunities in the Implementation of AI in Manufacturing: A Bibliometric Analysis",
+      "year": 2024,
+      "citations": 30,
+      "pagerank": 0.004926814502451363,
+      "id": "10.3390/sci6040060"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Machine learning-supported manufacturing: a review and directions for future research",
+      "year": 2024,
+      "citations": 26,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1080/21693277.2024.2326526"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Point2CAD: Reverse Engineering CAD Models from 3D Point Clouds",
+      "year": 2024,
+      "citations": 25,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1109/cvpr52733.2024.00361"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A review on physics-informed machine learning for process-structure-property modeling in additive manufacturing",
+      "year": 2024,
+      "citations": 24,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.jmapro.2024.11.066"
+    },
+    {
+      "in_degree": 0,
+      "out_degree": 1,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Intelligent support in manufacturing process selection based on artificial neural networks, fuzzy logic, and genetic algorithms: Current state and future perspectives",
+      "year": 2024,
+      "citations": 21,
+      "pagerank": 0.004926814502451363,
+      "id": "10.1016/j.cie.2024.110272"
+    },
+    {
+      "in_degree": 2,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Regression Shrinkage and Selection Via the Lasso",
+      "year": 1996,
+      "citations": 49802,
+      "pagerank": 0.012046763090050382,
+      "id": "10.1111/j.2517-6161.1996.tb02080.x"
+    },
+    {
+      "in_degree": 3,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Generative Adversarial Nets",
+      "year": 2023,
+      "citations": 19802,
+      "pagerank": 0.01309370218861626,
+      "id": "10.1007/978-3-658-40442-0_9"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Additive manufacturing of metallic components \u2013 Process, structure and properties",
+      "year": 2017,
+      "citations": 7482,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1016/j.pmatsci.2017.10.001"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "3D bioprinting of tissues and organs",
+      "year": 2014,
+      "citations": 6582,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1038/nbt.2958"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A Cyber-Physical Systems architecture for Industry 4.0-based manufacturing systems",
+      "year": 2014,
+      "citations": 4566,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1016/j.mfglet.2014.12.001"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Discovering governing equations from data by sparse identification of nonlinear dynamical systems",
+      "year": 2016,
+      "citations": 4120,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1073/pnas.1517384113"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "A random forest guided tour",
+      "year": 2016,
+      "citations": 3522,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1007/s11749-016-0481-7"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "On Physically Similar Systems; Illustrations of the Use of Dimensional Equations",
+      "year": 1914,
+      "citations": 3340,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1103/physrev.4.345"
+    },
+    {
+      "in_degree": 1,
+      "out_degree": 0,
+      "depth": 0,
+      "is_seed": false,
+      "title": "Improved protein structure prediction using potentials from deep learning",
+      "year": 2020,
+      "citations": 3335,
+      "pagerank": 0.011209211811197682,
+      "id": "10.1038/s41586-019-1923-7"
+    }
+  ],
+  "links": [
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1038/323533a0"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W3120740533"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/0893-6080(89)90020-8"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.5555/70405.70408"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/s1053-8119(03)00202-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1109/iros.2012.6386109"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1201/9780203749319"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W1738124305"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/0771-050x(80)90013-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1038/s41598-018-24271-9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W134960717"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/s0893-6080(05)80125-x"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.7551/mitpress/1888.003.0013"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W1532842753"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1007/bf02134016"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W3217350819"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/j.enbuild.2015.11.071"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "10.1016/0893-9659(89)90079-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1609/aaai.v35i9.16936",
+      "target": "W2962742960"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1016/j.jcp.2018.10.045"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/78.650093"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1038/s42254-021-00314-5"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1016/s1053-8119(03)00202-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/iros.2012.6386109"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/tsmc.1983.6313075"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1038/s42256-021-00302-5"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1038/s41598-018-24271-9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1016/s0893-6080(05)80125-x"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1007/978-1-4684-0392-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/tnnls.2014.2317880"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1007/s40304-017-0103-z"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1126/sciadv.abi8605"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/iccv.2019.00464"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1016/0771-050x(81)90010-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.3389/fncom.2013.00057"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1609/aaai.v35i16.17664"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-022-00556-7",
+      "target": "10.1109/lra.2020.2966414"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1111/j.2517-6161.1996.tb02080.x"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1007/978-3-658-40442-0_9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1016/j.jcp.2018.10.045"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1016/j.pmatsci.2017.10.001"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1038/nbt.2958"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1038/s42254-021-00314-5"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1016/j.mfglet.2014.12.001"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1073/pnas.1517384113"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1007/s11749-016-0481-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1103/physrev.4.345"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2021.117485",
+      "target": "10.1038/s41586-019-1923-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/tro.2023.3249564",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/tro.2023.3249564",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/tro.2023.3249564",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/tro.2023.3249564",
+      "target": "10.1038/323533a0"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/tro.2023.3249564",
+      "target": "10.1109/lra.2020.2966414"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1126/scirobotics.adc8892",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1126/scirobotics.adc8892",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1126/scirobotics.adc8892",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1126/scirobotics.adc8892",
+      "target": "10.1016/s1053-8119(03)00202-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1126/scirobotics.adc8892",
+      "target": "W3217350819"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-023-00650-4",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s42256-023-00650-4",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s41746-024-01084-x",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1145/3625544",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.euromechsol.2024.105242",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.euromechsol.2024.105242",
+      "target": "10.1007/978-3-658-40442-0_9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.euromechsol.2024.105242",
+      "target": "10.1016/j.jcp.2018.10.045"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.euromechsol.2024.105242",
+      "target": "10.1038/s42256-021-00302-5"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.buildenv.2021.108537",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.buildenv.2021.108537",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.iot.2023.101050",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3389/frsgr.2024.1371153",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3389/frsgr.2024.1371153",
+      "target": "10.1016/j.jcp.2018.10.045"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s41870-023-01506-1",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s41870-023-01506-1",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s12265-024-10504-y",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s12265-024-10504-y",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.pmcj.2024.101876",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111279",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111225",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111225",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111225",
+      "target": "10.1111/j.2517-6161.1996.tb02080.x"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111225",
+      "target": "10.1016/0893-6080(89)90020-8"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.engappai.2025.111225",
+      "target": "10.1007/978-3-658-40442-0_9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3389/fevo.2023.1146887",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3390/s25030705",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3390/s25030705",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s44172-025-00492-5",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s44172-025-00492-5",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1371/journal.pcbi.1012429",
+      "target": "10.1609/aaai.v35i9.16936"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1371/journal.pcbi.1012429",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/0893-6080(89)90020-8",
+      "target": "10.5555/70405.70408"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s41598-018-24271-9",
+      "target": "10.1038/s41598-018-24271-9"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s41598-018-24271-9",
+      "target": "10.1162/neco.1997.9.8.1735"
+    },
+    {
+      "weight": 1.0,
+      "source": "W134960717",
+      "target": "W3120740533"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/s0893-6080(05)80125-x",
+      "target": "10.1016/0893-6080(89)90020-8"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/s0893-6080(05)80125-x",
+      "target": "10.5555/70405.70408"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/0893-9659(89)90079-7",
+      "target": "10.1016/0771-050x(80)90013-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/0893-9659(89)90079-7",
+      "target": "10.1016/0771-050x(81)90010-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "W2962742960",
+      "target": "10.5555/70405.70408"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.heliyon.2024.e33681",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s43586-024-00341-3",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1038/s43586-024-00341-3",
+      "target": "10.1126/scirobotics.adc8892"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/lwc.2024.3436576",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/lwc.2024.3436576",
+      "target": "10.1126/scirobotics.adc8892"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/access.2025.3537859",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1093/pnasnexus/pgae488",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1093/pnasnexus/pgae488",
+      "target": "10.1126/scirobotics.adc8892"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1093/pnasnexus/pgae488",
+      "target": "10.1038/s42256-023-00650-4"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1162/netn_a_00435",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1021/acsestwater.3c00152",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.compbiomed.2024.108210",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.chaos.2024.115106",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/iros55552.2023.10342379",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.psep.2024.06.090",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3390/app14199118",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.ress.2024.110540",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1101/2023.08.31.23294925",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1063/5.0191574",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1063/5.0191574",
+      "target": "10.1007/s12265-024-10504-y"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.neucom.2024.127962",
+      "target": "10.1038/s42256-022-00556-7"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jcp.2018.10.045",
+      "target": "10.1016/0893-6080(89)90020-8"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jcp.2018.10.045",
+      "target": "10.5555/70405.70408"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/0771-050x(81)90010-3",
+      "target": "10.1016/0771-050x(80)90013-3"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s11831-022-09795-8",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1002/adma.202305254",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.addma.2022.103139",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.matdes.2023.112356",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.resourpol.2023.103892",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmatprotec.2022.117550",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.matdes.2023.111625",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmsy.2022.12.004",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1080/17452759.2024.2390495",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1007/s40544-024-0879-2",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.measurement.2024.115303",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.amf.2025.200198",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.cirpj.2023.08.005",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1080/14783363.2023.2194524",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.cirp.2024.04.102",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.3390/sci6040060",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1080/21693277.2024.2326526",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1109/cvpr52733.2024.00361",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.jmapro.2024.11.066",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    },
+    {
+      "weight": 1.0,
+      "source": "10.1016/j.cie.2024.110272",
+      "target": "10.1016/j.jmatprotec.2021.117485"
+    }
+  ]
+}

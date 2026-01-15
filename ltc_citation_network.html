@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Citation Network: Liquid Time-constant Networks</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #1a1a2e; color: #eee; }
+        h1 { color: #00d4ff; text-align: center; }
+        #network { width: 100%; height: 700px; border: 2px solid #00d4ff; border-radius: 10px; background: #16213e; }
+        .stats { display: flex; justify-content: center; gap: 40px; margin: 20px 0; }
+        .stat { text-align: center; padding: 15px 25px; background: #0f3460; border-radius: 8px; }
+        .stat-value { font-size: 2em; color: #00d4ff; }
+        .stat-label { font-size: 0.9em; color: #aaa; }
+        .legend { display: flex; justify-content: center; gap: 20px; margin: 15px 0; }
+        .legend-item { display: flex; align-items: center; gap: 8px; }
+        .legend-dot { width: 15px; height: 15px; border-radius: 50%; }
+        #info { margin-top: 20px; padding: 15px; background: #0f3460; border-radius: 8px; display: none; }
+    </style>
+</head>
+<body>
+    <h1>🔗 Citation Network: Liquid Time-constant Networks</h1>
+    
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">NODES_COUNT</div>
+            <div class="stat-label">Papers</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">EDGES_COUNT</div>
+            <div class="stat-label">Citations</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">CLUSTERS_COUNT</div>
+            <div class="stat-label">Clusters</div>
+        </div>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background: #ff6b6b;"></div> Seed Paper</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #4ecdc4;"></div> Neural ODEs</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #ffe66d;"></div> RNNs/LSTMs</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #95e1d3;"></div> Applications</div>
+        <div class="legend-item"><div class="legend-dot" style="background: #a8e6cf;"></div> Other</div>
+    </div>
+    
+    <div id="network"></div>
+    <div id="info"></div>
+    
+    <script>
+        var nodes = new vis.DataSet(NODES_DATA);
+        var edges = new vis.DataSet([{"from": "10.1609/aaai.v35i9.16936", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1038/323533a0"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W3120740533"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/0893-6080(89)90020-8"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.5555/70405.70408"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/s1053-8119(03)00202-7"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1109/iros.2012.6386109"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1201/9780203749319"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W1738124305"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/0771-050x(80)90013-3"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1038/s41598-018-24271-9"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W134960717"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/s0893-6080(05)80125-x"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.7551/mitpress/1888.003.0013"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W1532842753"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1007/bf02134016"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W3217350819"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/j.enbuild.2015.11.071"}, {"from": "10.1609/aaai.v35i9.16936", "to": "10.1016/0893-9659(89)90079-7"}, {"from": "10.1609/aaai.v35i9.16936", "to": "W2962742960"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1016/j.jcp.2018.10.045"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/78.650093"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1038/s42254-021-00314-5"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1016/s1053-8119(03)00202-7"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/iros.2012.6386109"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/tsmc.1983.6313075"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1038/s42256-021-00302-5"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1038/s41598-018-24271-9"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1016/s0893-6080(05)80125-x"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1007/978-1-4684-0392-3"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/tnnls.2014.2317880"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1007/s40304-017-0103-z"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1126/sciadv.abi8605"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/iccv.2019.00464"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1016/0771-050x(81)90010-3"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.3389/fncom.2013.00057"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1609/aaai.v35i16.17664"}, {"from": "10.1038/s42256-022-00556-7", "to": "10.1109/lra.2020.2966414"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1111/j.2517-6161.1996.tb02080.x"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1007/978-3-658-40442-0_9"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1016/j.jcp.2018.10.045"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1016/j.pmatsci.2017.10.001"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1038/nbt.2958"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1038/s42254-021-00314-5"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1016/j.mfglet.2014.12.001"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1073/pnas.1517384113"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1007/s11749-016-0481-7"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1103/physrev.4.345"}, {"from": "10.1016/j.jmatprotec.2021.117485", "to": "10.1038/s41586-019-1923-7"}, {"from": "10.1109/tro.2023.3249564", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1109/tro.2023.3249564", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1109/tro.2023.3249564", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1109/tro.2023.3249564", "to": "10.1038/323533a0"}, {"from": "10.1109/tro.2023.3249564", "to": "10.1109/lra.2020.2966414"}, {"from": "10.1126/scirobotics.adc8892", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1126/scirobotics.adc8892", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1126/scirobotics.adc8892", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1126/scirobotics.adc8892", "to": "10.1016/s1053-8119(03)00202-7"}, {"from": "10.1126/scirobotics.adc8892", "to": "W3217350819"}, {"from": "10.1038/s42256-023-00650-4", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1038/s42256-023-00650-4", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1038/s41746-024-01084-x", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1145/3625544", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.euromechsol.2024.105242", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.euromechsol.2024.105242", "to": "10.1007/978-3-658-40442-0_9"}, {"from": "10.1016/j.euromechsol.2024.105242", "to": "10.1016/j.jcp.2018.10.045"}, {"from": "10.1016/j.euromechsol.2024.105242", "to": "10.1038/s42256-021-00302-5"}, {"from": "10.1016/j.buildenv.2021.108537", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.buildenv.2021.108537", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1016/j.iot.2023.101050", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.3389/frsgr.2024.1371153", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.3389/frsgr.2024.1371153", "to": "10.1016/j.jcp.2018.10.045"}, {"from": "10.1007/s41870-023-01506-1", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1007/s41870-023-01506-1", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1007/s12265-024-10504-y", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1007/s12265-024-10504-y", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.pmcj.2024.101876", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.engappai.2025.111279", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.engappai.2025.111225", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1016/j.engappai.2025.111225", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1016/j.engappai.2025.111225", "to": "10.1111/j.2517-6161.1996.tb02080.x"}, {"from": "10.1016/j.engappai.2025.111225", "to": "10.1016/0893-6080(89)90020-8"}, {"from": "10.1016/j.engappai.2025.111225", "to": "10.1007/978-3-658-40442-0_9"}, {"from": "10.3389/fevo.2023.1146887", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.3390/s25030705", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.3390/s25030705", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1038/s44172-025-00492-5", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1038/s44172-025-00492-5", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "10.1371/journal.pcbi.1012429", "to": "10.1609/aaai.v35i9.16936"}, {"from": "10.1371/journal.pcbi.1012429", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/0893-6080(89)90020-8", "to": "10.5555/70405.70408"}, {"from": "10.1038/s41598-018-24271-9", "to": "10.1038/s41598-018-24271-9"}, {"from": "10.1038/s41598-018-24271-9", "to": "10.1162/neco.1997.9.8.1735"}, {"from": "W134960717", "to": "W3120740533"}, {"from": "10.1016/s0893-6080(05)80125-x", "to": "10.1016/0893-6080(89)90020-8"}, {"from": "10.1016/s0893-6080(05)80125-x", "to": "10.5555/70405.70408"}, {"from": "10.1016/0893-9659(89)90079-7", "to": "10.1016/0771-050x(80)90013-3"}, {"from": "10.1016/0893-9659(89)90079-7", "to": "10.1016/0771-050x(81)90010-3"}, {"from": "W2962742960", "to": "10.5555/70405.70408"}, {"from": "10.1016/j.heliyon.2024.e33681", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1038/s43586-024-00341-3", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1038/s43586-024-00341-3", "to": "10.1126/scirobotics.adc8892"}, {"from": "10.1109/lwc.2024.3436576", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1109/lwc.2024.3436576", "to": "10.1126/scirobotics.adc8892"}, {"from": "10.1109/access.2025.3537859", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1093/pnasnexus/pgae488", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1093/pnasnexus/pgae488", "to": "10.1126/scirobotics.adc8892"}, {"from": "10.1093/pnasnexus/pgae488", "to": "10.1038/s42256-023-00650-4"}, {"from": "10.1162/netn_a_00435", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1021/acsestwater.3c00152", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.compbiomed.2024.108210", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.chaos.2024.115106", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1109/iros55552.2023.10342379", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.psep.2024.06.090", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.3390/app14199118", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.ress.2024.110540", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1101/2023.08.31.23294925", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1063/5.0191574", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1063/5.0191574", "to": "10.1007/s12265-024-10504-y"}, {"from": "10.1016/j.neucom.2024.127962", "to": "10.1038/s42256-022-00556-7"}, {"from": "10.1016/j.jcp.2018.10.045", "to": "10.1016/0893-6080(89)90020-8"}, {"from": "10.1016/j.jcp.2018.10.045", "to": "10.5555/70405.70408"}, {"from": "10.1016/0771-050x(81)90010-3", "to": "10.1016/0771-050x(80)90013-3"}, {"from": "10.1007/s11831-022-09795-8", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1002/adma.202305254", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.addma.2022.103139", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.matdes.2023.112356", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.resourpol.2023.103892", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.jmatprotec.2022.117550", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.matdes.2023.111625", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.jmsy.2022.12.004", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1080/17452759.2024.2390495", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1007/s40544-024-0879-2", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.measurement.2024.115303", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.amf.2025.200198", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.cirpj.2023.08.005", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1080/14783363.2023.2194524", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.cirp.2024.04.102", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.3390/sci6040060", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1080/21693277.2024.2326526", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1109/cvpr52733.2024.00361", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.jmapro.2024.11.066", "to": "10.1016/j.jmatprotec.2021.117485"}, {"from": "10.1016/j.cie.2024.110272", "to": "10.1016/j.jmatprotec.2021.117485"}]);
+        
+        var container = document.getElementById('network');
+        var data = { nodes: nodes, edges: edges };
+        var options = {
+            nodes: {
+                shape: 'dot',
+                font: { color: '#ffffff', size: 12 },
+                borderWidth: 2,
+                shadow: true
+            },
+            edges: {
+                arrows: 'to',
+                color: { color: '#555', opacity: 0.6 },
+                smooth: { type: 'continuous' }
+            },
+            physics: {
+                forceAtlas2Based: {
+                    gravitationalConstant: -50,
+                    centralGravity: 0.01,
+                    springLength: 100,
+                    springConstant: 0.08
+                },
+                solver: 'forceAtlas2Based',
+                stabilization: { iterations: 150 }
+            },
+            interaction: {
+                hover: true,
+                tooltipDelay: 200
+            }
+        };
+        
+        var network = new vis.Network(container, data, options);
+        
+        network.on("click", function(params) {
+            if (params.nodes.length > 0) {
+                var nodeId = params.nodes[0];
+                var node = nodes.get(nodeId);
+                document.getElementById('info').style.display = 'block';
+                document.getElementById('info').innerHTML = 
+                    '<strong>' + node.title + '</strong><br>' +
+                    'Year: ' + (node.year || 'N/A') + ' | Citations: ' + (node.citations || 0);
+            }
+        });
+    </script>
+</body>
+</html>

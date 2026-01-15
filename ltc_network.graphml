@@ -1,0 +1,1452 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d8" for="edge" attr.name="weight" attr.type="double" />
+  <key id="d7" for="node" attr.name="pagerank" attr.type="double" />
+  <key id="d6" for="node" attr.name="citations" attr.type="long" />
+  <key id="d5" for="node" attr.name="year" attr.type="long" />
+  <key id="d4" for="node" attr.name="title" attr.type="string" />
+  <key id="d3" for="node" attr.name="is_seed" attr.type="boolean" />
+  <key id="d2" for="node" attr.name="depth" attr.type="long" />
+  <key id="d1" for="node" attr.name="out_degree" attr.type="long" />
+  <key id="d0" for="node" attr.name="in_degree" attr.type="long" />
+  <graph edgedefault="directed">
+    <node id="10.1609/aaai.v35i9.16936">
+      <data key="d0">33</data>
+      <data key="d1">26</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Liquid Time-constant Networks</data>
+      <data key="d5">2021</data>
+      <data key="d6">224</data>
+      <data key="d7">0.06207818954492359</data>
+    </node>
+    <node id="10.1038/s42256-022-00556-7">
+      <data key="d0">22</data>
+      <data key="d1">21</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Closed-form continuous-time neural networks</data>
+      <data key="d5">2022</data>
+      <data key="d6">126</data>
+      <data key="d7">0.07055966303392498</data>
+    </node>
+    <node id="10.1016/j.jmatprotec.2021.117485">
+      <data key="d0">20</data>
+      <data key="d1">12</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Mechanistic artificial intelligence (mechanistic-AI) for modeling, design, and control of advanced manufacturing processes: Current state and perspectives</data>
+      <data key="d5">2021</data>
+      <data key="d6">123</data>
+      <data key="d7">0.0886819423877215</data>
+    </node>
+    <node id="10.1109/tro.2023.3249564">
+      <data key="d0">0</data>
+      <data key="d1">6</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">BarrierNet: Differentiable Control Barrier Functions for Learning of Safe Robot Control</data>
+      <data key="d5">2023</data>
+      <data key="d6">82</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1126/scirobotics.adc8892">
+      <data key="d0">3</data>
+      <data key="d1">7</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Robust flight navigation out of distribution with liquid neural networks</data>
+      <data key="d5">2023</data>
+      <data key="d6">64</data>
+      <data key="d7">0.010510489694802703</data>
+    </node>
+    <node id="10.1038/s42256-023-00650-4">
+      <data key="d0">1</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Accurate online training of dynamical spiking neural networks through Forward Propagation Through Time</data>
+      <data key="d5">2023</data>
+      <data key="d6">54</data>
+      <data key="d7">0.006322733300539198</data>
+    </node>
+    <node id="10.1038/s41746-024-01084-x">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Whole-heart electromechanical simulations using Latent Neural Ordinary Differential Equations</data>
+      <data key="d5">2024</data>
+      <data key="d6">29</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1145/3625544">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A Survey on Collaborative Learning for Intelligent Autonomous Systems</data>
+      <data key="d5">2023</data>
+      <data key="d6">25</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.euromechsol.2024.105242">
+      <data key="d0">0</data>
+      <data key="d1">4</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Micromechanics-based deep-learning for composites: Challenges and future perspectives</data>
+      <data key="d5">2024</data>
+      <data key="d6">25</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.buildenv.2021.108537">
+      <data key="d0">0</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Neural circuit policies-based temporal flexible soft-sensor modeling of subway PM2.5 with applications on indoor air quality management</data>
+      <data key="d5">2021</data>
+      <data key="d6">24</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.iot.2023.101050">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Forecasting energy power consumption using federated learning in edge computing devices</data>
+      <data key="d5">2023</data>
+      <data key="d6">24</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.3389/frsgr.2024.1371153">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A review of machine learning applications in power system protection and emergency control: opportunities, challenges, and future directions</data>
+      <data key="d5">2024</data>
+      <data key="d6">24</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1007/s41870-023-01506-1">
+      <data key="d0">0</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Liquidt: stock market analysis using liquid time-constant neural networks</data>
+      <data key="d5">2023</data>
+      <data key="d6">19</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1007/s12265-024-10504-y">
+      <data key="d0">1</data>
+      <data key="d1">4</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Efficient Edge-AI Models for Robust ECG Abnormality Detection on Resource-Constrained Hardware</data>
+      <data key="d5">2024</data>
+      <data key="d6">17</data>
+      <data key="d7">0.007020692699583116</data>
+    </node>
+    <node id="10.1016/j.pmcj.2024.101876">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Sensor-based agitation prediction in institutionalized people with dementia A systematic review</data>
+      <data key="d5">2024</data>
+      <data key="d6">15</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.engappai.2025.111279">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Mamba-360: Survey of state space models as transformer alternative for long sequence modelling: Methods, Applications, and Challenges</data>
+      <data key="d5">2025</data>
+      <data key="d6">12</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.engappai.2025.111225">
+      <data key="d0">0</data>
+      <data key="d1">5</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A survey on state-of-the-art deep learning applications and challenges</data>
+      <data key="d5">2025</data>
+      <data key="d6">9</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.3389/fevo.2023.1146887">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">The influence of regional tourism economy development on carbon neutrality for environmental protection using improved recurrent neural network</data>
+      <data key="d5">2023</data>
+      <data key="d6">8</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.3390/s25030705">
+      <data key="d0">0</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Digital Twin Smart City Visualization with MoE-Based Personal Thermal Comfort Analysis</data>
+      <data key="d5">2025</data>
+      <data key="d6">6</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1038/s44172-025-00492-5">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Neuromorphic computing for robotic vision: algorithms to hardware advances</data>
+      <data key="d5">2025</data>
+      <data key="d6">6</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1371/journal.pcbi.1012429">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Oscillations in an artificial neural network convert competing inputs into a temporal code</data>
+      <data key="d5">2024</data>
+      <data key="d6">4</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1162/neco.1997.9.8.1735">
+      <data key="d0">11</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Long Short-Term Memory</data>
+      <data key="d5">1997</data>
+      <data key="d6">91772</data>
+      <data key="d7">0.03289715613098955</data>
+    </node>
+    <node id="10.1038/323533a0">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Learning representations by back-propagating errors</data>
+      <data key="d5">1986</data>
+      <data key="d6">29201</data>
+      <data key="d7">0.008402860272149993</data>
+    </node>
+    <node id="W3120740533">
+      <data key="d0">3</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">UCI Machine Learning Repository</data>
+      <data key="d5">2007</data>
+      <data key="d6">24286</data>
+      <data key="d7">0.013995425490487478</data>
+    </node>
+    <node id="10.1016/0893-6080(89)90020-8">
+      <data key="d0">4</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Multilayer feedforward networks are universal approximators</data>
+      <data key="d5">1989</data>
+      <data key="d6">20438</data>
+      <data key="d7">0.02026531845593206</data>
+    </node>
+    <node id="10.5555/70405.70408">
+      <data key="d0">6</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Multilayer feedforward networks are universal approximators</data>
+      <data key="d5">1989</data>
+      <data key="d6">9345</data>
+      <data key="d7">0.04308219964669323</data>
+    </node>
+    <node id="10.1016/s1053-8119(03)00202-7">
+      <data key="d0">3</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Dynamic causal modelling</data>
+      <data key="d5">2003</data>
+      <data key="d6">4637</data>
+      <data key="d7">0.012351326725810765</data>
+    </node>
+    <node id="10.1109/iros.2012.6386109">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">MuJoCo: A physics engine for model-based control</data>
+      <data key="d5">2012</data>
+      <data key="d6">4196</data>
+      <data key="d7">0.010564428629482165</data>
+    </node>
+    <node id="10.1201/9780203749319">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Mathematical Theory of Optimal Processes</data>
+      <data key="d5">2018</data>
+      <data key="d6">3620</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="W1738124305">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Numerical Recipes 3rd Edition: The Art of Scientific Computing</data>
+      <data key="d5">2007</data>
+      <data key="d6">3439</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="10.1016/0771-050x(80)90013-3">
+      <data key="d0">4</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A family of embedded Runge-Kutta formulae</data>
+      <data key="d5">1980</data>
+      <data key="d6">3435</data>
+      <data key="d7">0.020250008535620652</data>
+    </node>
+    <node id="10.1038/s41598-018-24271-9">
+      <data key="d0">4</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Recurrent Neural Networks for Multivariate Time Series with Missing Values</data>
+      <data key="d5">2018</data>
+      <data key="d6">1946</data>
+      <data key="d7">0.018372422730374347</data>
+    </node>
+    <node id="W134960717">
+      <data key="d0">1</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A public domain dataset for human activity recognition using smartphones</data>
+      <data key="d5">2013</data>
+      <data key="d6">1691</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="10.1016/s0893-6080(05)80125-x">
+      <data key="d0">2</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Approximation of dynamical systems by continuous time recurrent neural networks</data>
+      <data key="d5">1993</data>
+      <data key="d6">961</data>
+      <data key="d7">0.010564428629482165</data>
+    </node>
+    <node id="10.7551/mitpress/1888.003.0013">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Learning Representations by Back-Propagating Errors</data>
+      <data key="d5">2002</data>
+      <data key="d6">796</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="W1532842753">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Methods in Neuronal Modeling: From Ions to Networks</data>
+      <data key="d5">1998</data>
+      <data key="d6">762</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="10.1007/bf02134016">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Approximation by superpositions of a sigmoidal function</data>
+      <data key="d5">1992</data>
+      <data key="d6">743</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="W3217350819">
+      <data key="d0">3</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Recherches quantitatives sur l' excitation electrique des nerfs traitee comme une polarization.</data>
+      <data key="d5">1907</data>
+      <data key="d6">559</data>
+      <data key="d7">0.009352207089625891</data>
+    </node>
+    <node id="10.1016/j.enbuild.2015.11.071">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Accurate occupancy detection of an office room from light, temperature, humidity and CO 2 measurements using statistical learning models</data>
+      <data key="d5">2015</data>
+      <data key="d6">557</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="10.1016/0893-9659(89)90079-7">
+      <data key="d0">2</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A 3(2) pair of Runge - Kutta formulas</data>
+      <data key="d5">1989</data>
+      <data key="d6">532</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="W2962742960">
+      <data key="d0">2</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">The Power of Depth for Feedforward Neural Networks</data>
+      <data key="d5">2016</data>
+      <data key="d6">347</data>
+      <data key="d7">0.007565308993297293</data>
+    </node>
+    <node id="10.1016/j.heliyon.2024.e33681">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A review on machine learning implementation for predicting and optimizing the mechanical behaviour of laminated fiber-reinforced polymer composites</data>
+      <data key="d5">2024</data>
+      <data key="d6">42</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1038/s43586-024-00341-3">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A guide to single-particle tracking</data>
+      <data key="d5">2024</data>
+      <data key="d6">36</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1109/lwc.2024.3436576">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Robust Beamforming With Gradient-Based Liquid Neural Network</data>
+      <data key="d5">2024</data>
+      <data key="d6">32</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1109/access.2025.3537859">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Artificial Intelligence for Control in Laser-Based Additive Manufacturing: A Systematic Review</data>
+      <data key="d5">2025</data>
+      <data key="d6">17</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1093/pnasnexus/pgae488">
+      <data key="d0">0</data>
+      <data key="d1">3</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Neuromorphic neuromodulation: Towards the next generation of closed-loop neurostimulation</data>
+      <data key="d5">2024</data>
+      <data key="d6">12</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1162/netn_a_00435">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Translational network neuroscience: Nine roadblocks and possible solutions</data>
+      <data key="d5">2025</data>
+      <data key="d6">4</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1021/acsestwater.3c00152">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Deep Learning in Environmental Toxicology: Current Progress and Open Challenges</data>
+      <data key="d5">2023</data>
+      <data key="d6">14</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.compbiomed.2024.108210">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Enhanced multi-label cardiology diagnosis with channel-wise recurrent fusion</data>
+      <data key="d5">2024</data>
+      <data key="d6">11</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.chaos.2024.115106">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Delay-dependent bifurcation conditions in a fractional-order inertial BAM neural network</data>
+      <data key="d5">2024</data>
+      <data key="d6">10</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1109/iros55552.2023.10342379">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Machine Learning Best Practices for Soft Robot Proprioception</data>
+      <data key="d5">2023</data>
+      <data key="d6">8</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.psep.2024.06.090">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Long-term prediction method for PM2.5 concentration using edge channel graph attention network and gating closed-form continuous-time neural networks</data>
+      <data key="d5">2024</data>
+      <data key="d6">8</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.3390/app14199118">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Optimizing Plant Disease Classification with Hybrid Convolutional Neural Network–Recurrent Neural Network and Liquid Time-Constant Network</data>
+      <data key="d5">2024</data>
+      <data key="d6">7</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.ress.2024.110540">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A closed-form continuous-depth neural-based hybrid difference features re-representation network for RUL prediction</data>
+      <data key="d5">2024</data>
+      <data key="d6">7</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1101/2023.08.31.23294925">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Efficient Edge-AI Models for Robust ECG Abnormality Detection on Resource-Constrained Hardware</data>
+      <data key="d5">2023</data>
+      <data key="d6">8</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1063/5.0191574">
+      <data key="d0">0</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Cardiac abnormality detection with a tiny diagonal state space model based on sequential liquid neural processing unit</data>
+      <data key="d5">2024</data>
+      <data key="d6">7</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.neucom.2024.127962">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Efficient learning in spiking neural networks</data>
+      <data key="d5">2024</data>
+      <data key="d6">4</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.jcp.2018.10.045">
+      <data key="d0">4</data>
+      <data key="d1">2</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations</data>
+      <data key="d5">2018</data>
+      <data key="d6">13403</data>
+      <data key="d7">0.017349148743080186</data>
+    </node>
+    <node id="10.1109/78.650093">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Bidirectional recurrent neural networks</data>
+      <data key="d5">1997</data>
+      <data key="d6">9488</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1038/s42254-021-00314-5">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Physics-informed machine learning</data>
+      <data key="d5">2021</data>
+      <data key="d6">5105</data>
+      <data key="d7">0.014208331447382556</data>
+    </node>
+    <node id="10.1109/tsmc.1983.6313075">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Absolute stability of global pattern formation and parallel memory storage by competitive neural networks</data>
+      <data key="d5">1983</data>
+      <data key="d6">2521</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1038/s42256-021-00302-5">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators</data>
+      <data key="d5">2021</data>
+      <data key="d6">2154</data>
+      <data key="d7">0.008972873237202111</data>
+    </node>
+    <node id="10.1007/978-1-4684-0392-3">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Differential Equations and Dynamical Systems</data>
+      <data key="d5">1991</data>
+      <data key="d6">705</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1109/tnnls.2014.2317880">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A Comprehensive Review of Stability Analysis of Continuous-Time Recurrent Neural Networks</data>
+      <data key="d5">2014</data>
+      <data key="d6">636</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1007/s40304-017-0103-z">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A Proposal on Machine Learning via Dynamical Systems</data>
+      <data key="d5">2017</data>
+      <data key="d6">617</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1126/sciadv.abi8605">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Learning the solution operator of parametric partial differential equations with physics-informed DeepONets</data>
+      <data key="d5">2021</data>
+      <data key="d6">574</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1109/iccv.2019.00464">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">PointFlow: 3D Point Cloud Generation With Continuous Normalizing Flows</data>
+      <data key="d5">2019</data>
+      <data key="d6">556</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1016/0771-050x(81)90010-3">
+      <data key="d0">2</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">High order embedded Runge-Kutta formulae</data>
+      <data key="d5">1981</data>
+      <data key="d6">513</data>
+      <data key="d7">0.01114099238723133</data>
+    </node>
+    <node id="10.3389/fncom.2013.00057">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Neural masses and fields in dynamic causal modeling</data>
+      <data key="d5">2013</data>
+      <data key="d6">282</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1609/aaai.v35i16.17664">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Nyströmformer: A Nyström-based Algorithm for Approximating Self-Attention</data>
+      <data key="d5">2021</data>
+      <data key="d6">274</data>
+      <data key="d7">0.007925934138636235</data>
+    </node>
+    <node id="10.1109/lra.2020.2966414">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Learning Robust Control Policies for End-to-End Autonomous Driving From Data-Driven Simulation</data>
+      <data key="d5">2020</data>
+      <data key="d6">195</data>
+      <data key="d7">0.008763485417488937</data>
+    </node>
+    <node id="10.1007/s11831-022-09795-8">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A State-of-the-Art Review on Machine Learning-Based Multiscale Modeling, Simulation, Homogenization and Design of Materials</data>
+      <data key="d5">2022</data>
+      <data key="d6">162</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1002/adma.202305254">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Data‐Driven Design for Metamaterials and Multiscale Systems: A Review</data>
+      <data key="d5">2023</data>
+      <data key="d6">155</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.addma.2022.103139">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Intelligent additive manufacturing and design: state of the art and future perspectives</data>
+      <data key="d5">2022</data>
+      <data key="d6">116</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.matdes.2023.112356">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Additive friction stir deposition of metallic materials: Process, structure and properties</data>
+      <data key="d5">2023</data>
+      <data key="d6">103</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.resourpol.2023.103892">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Is artificial intelligence associated with carbon emissions reduction? Case of China</data>
+      <data key="d5">2023</data>
+      <data key="d6">99</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.jmatprotec.2022.117550">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Monitoring and prediction of porosity in laser powder bed fusion using physics-informed meltpool signatures and machine learning</data>
+      <data key="d5">2022</data>
+      <data key="d6">94</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.matdes.2023.111625">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Extreme gradient boosting-inspired process optimization algorithm for manufacturing engineering applications</data>
+      <data key="d5">2023</data>
+      <data key="d6">57</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.jmsy.2022.12.004">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Human-machine collaborative additive manufacturing</data>
+      <data key="d5">2022</data>
+      <data key="d6">46</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1080/17452759.2024.2390495">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">State-of-art review on the process-structure-properties-performance linkage in wire arc additive manufacturing</data>
+      <data key="d5">2024</data>
+      <data key="d6">46</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1007/s40544-024-0879-2">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">AI for tribology: Present and future</data>
+      <data key="d5">2024</data>
+      <data key="d6">42</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.measurement.2024.115303">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Data-driven prediction of tool wear using Bayesian regularized artificial neural networks</data>
+      <data key="d5">2024</data>
+      <data key="d6">39</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.amf.2025.200198">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Additive Manufacturing Modification by Artificial Intelligence, Machine Learning, and Deep Learning: A Review</data>
+      <data key="d5">2025</data>
+      <data key="d6">34</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.cirpj.2023.08.005">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Vision on metal additive manufacturing: Developments, challenges and future trends</data>
+      <data key="d5">2023</data>
+      <data key="d6">33</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1080/14783363.2023.2194524">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Manufacturing quality assessment in the industry 4.0 era: a review</data>
+      <data key="d5">2023</data>
+      <data key="d6">31</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.cirp.2024.04.102">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Artificial intelligence in metal forming</data>
+      <data key="d5">2024</data>
+      <data key="d6">31</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.3390/sci6040060">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Challenges and Opportunities in the Implementation of AI in Manufacturing: A Bibliometric Analysis</data>
+      <data key="d5">2024</data>
+      <data key="d6">30</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1080/21693277.2024.2326526">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Machine learning-supported manufacturing: a review and directions for future research</data>
+      <data key="d5">2024</data>
+      <data key="d6">26</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1109/cvpr52733.2024.00361">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Point2CAD: Reverse Engineering CAD Models from 3D Point Clouds</data>
+      <data key="d5">2024</data>
+      <data key="d6">25</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.jmapro.2024.11.066">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A review on physics-informed machine learning for process-structure-property modeling in additive manufacturing</data>
+      <data key="d5">2024</data>
+      <data key="d6">24</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1016/j.cie.2024.110272">
+      <data key="d0">0</data>
+      <data key="d1">1</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Intelligent support in manufacturing process selection based on artificial neural networks, fuzzy logic, and genetic algorithms: Current state and future perspectives</data>
+      <data key="d5">2024</data>
+      <data key="d6">21</data>
+      <data key="d7">0.004926814502451363</data>
+    </node>
+    <node id="10.1111/j.2517-6161.1996.tb02080.x">
+      <data key="d0">2</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Regression Shrinkage and Selection Via the Lasso</data>
+      <data key="d5">1996</data>
+      <data key="d6">49802</data>
+      <data key="d7">0.012046763090050382</data>
+    </node>
+    <node id="10.1007/978-3-658-40442-0_9">
+      <data key="d0">3</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Generative Adversarial Nets</data>
+      <data key="d5">2023</data>
+      <data key="d6">19802</data>
+      <data key="d7">0.01309370218861626</data>
+    </node>
+    <node id="10.1016/j.pmatsci.2017.10.001">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Additive manufacturing of metallic components – Process, structure and properties</data>
+      <data key="d5">2017</data>
+      <data key="d6">7482</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1038/nbt.2958">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">3D bioprinting of tissues and organs</data>
+      <data key="d5">2014</data>
+      <data key="d6">6582</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1016/j.mfglet.2014.12.001">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A Cyber-Physical Systems architecture for Industry 4.0-based manufacturing systems</data>
+      <data key="d5">2014</data>
+      <data key="d6">4566</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1073/pnas.1517384113">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Discovering governing equations from data by sparse identification of nonlinear dynamical systems</data>
+      <data key="d5">2016</data>
+      <data key="d6">4120</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1007/s11749-016-0481-7">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">A random forest guided tour</data>
+      <data key="d5">2016</data>
+      <data key="d6">3522</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1103/physrev.4.345">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">On Physically Similar Systems; Illustrations of the Use of Dimensional Equations</data>
+      <data key="d5">1914</data>
+      <data key="d6">3340</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <node id="10.1038/s41586-019-1923-7">
+      <data key="d0">1</data>
+      <data key="d1">0</data>
+      <data key="d2">0</data>
+      <data key="d3">False</data>
+      <data key="d4">Improved protein structure prediction using potentials from deep learning</data>
+      <data key="d5">2020</data>
+      <data key="d6">3335</data>
+      <data key="d7">0.011209211811197682</data>
+    </node>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1038/323533a0">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W3120740533">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/0893-6080(89)90020-8">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.5555/70405.70408">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/s1053-8119(03)00202-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1109/iros.2012.6386109">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1201/9780203749319">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W1738124305">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/0771-050x(80)90013-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1038/s41598-018-24271-9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W134960717">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/s0893-6080(05)80125-x">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.7551/mitpress/1888.003.0013">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W1532842753">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1007/bf02134016">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W3217350819">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/j.enbuild.2015.11.071">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="10.1016/0893-9659(89)90079-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1609/aaai.v35i9.16936" target="W2962742960">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1016/j.jcp.2018.10.045">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/78.650093">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1038/s42254-021-00314-5">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1016/s1053-8119(03)00202-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/iros.2012.6386109">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/tsmc.1983.6313075">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1038/s42256-021-00302-5">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1038/s41598-018-24271-9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1016/s0893-6080(05)80125-x">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1007/978-1-4684-0392-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/tnnls.2014.2317880">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1007/s40304-017-0103-z">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1126/sciadv.abi8605">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/iccv.2019.00464">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1016/0771-050x(81)90010-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.3389/fncom.2013.00057">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1609/aaai.v35i16.17664">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-022-00556-7" target="10.1109/lra.2020.2966414">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1111/j.2517-6161.1996.tb02080.x">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1007/978-3-658-40442-0_9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1016/j.jcp.2018.10.045">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1016/j.pmatsci.2017.10.001">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1038/nbt.2958">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1038/s42254-021-00314-5">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1016/j.mfglet.2014.12.001">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1073/pnas.1517384113">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1007/s11749-016-0481-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1103/physrev.4.345">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2021.117485" target="10.1038/s41586-019-1923-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/tro.2023.3249564" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/tro.2023.3249564" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/tro.2023.3249564" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/tro.2023.3249564" target="10.1038/323533a0">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/tro.2023.3249564" target="10.1109/lra.2020.2966414">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1126/scirobotics.adc8892" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1126/scirobotics.adc8892" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1126/scirobotics.adc8892" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1126/scirobotics.adc8892" target="10.1016/s1053-8119(03)00202-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1126/scirobotics.adc8892" target="W3217350819">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-023-00650-4" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s42256-023-00650-4" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s41746-024-01084-x" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1145/3625544" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.euromechsol.2024.105242" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.euromechsol.2024.105242" target="10.1007/978-3-658-40442-0_9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.euromechsol.2024.105242" target="10.1016/j.jcp.2018.10.045">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.euromechsol.2024.105242" target="10.1038/s42256-021-00302-5">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.buildenv.2021.108537" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.buildenv.2021.108537" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.iot.2023.101050" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3389/frsgr.2024.1371153" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3389/frsgr.2024.1371153" target="10.1016/j.jcp.2018.10.045">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s41870-023-01506-1" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s41870-023-01506-1" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s12265-024-10504-y" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s12265-024-10504-y" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.pmcj.2024.101876" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111279" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111225" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111225" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111225" target="10.1111/j.2517-6161.1996.tb02080.x">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111225" target="10.1016/0893-6080(89)90020-8">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.engappai.2025.111225" target="10.1007/978-3-658-40442-0_9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3389/fevo.2023.1146887" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3390/s25030705" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3390/s25030705" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s44172-025-00492-5" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s44172-025-00492-5" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1371/journal.pcbi.1012429" target="10.1609/aaai.v35i9.16936">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1371/journal.pcbi.1012429" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/0893-6080(89)90020-8" target="10.5555/70405.70408">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s41598-018-24271-9" target="10.1038/s41598-018-24271-9">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s41598-018-24271-9" target="10.1162/neco.1997.9.8.1735">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="W134960717" target="W3120740533">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/s0893-6080(05)80125-x" target="10.1016/0893-6080(89)90020-8">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/s0893-6080(05)80125-x" target="10.5555/70405.70408">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/0893-9659(89)90079-7" target="10.1016/0771-050x(80)90013-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/0893-9659(89)90079-7" target="10.1016/0771-050x(81)90010-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="W2962742960" target="10.5555/70405.70408">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.heliyon.2024.e33681" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s43586-024-00341-3" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1038/s43586-024-00341-3" target="10.1126/scirobotics.adc8892">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/lwc.2024.3436576" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/lwc.2024.3436576" target="10.1126/scirobotics.adc8892">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/access.2025.3537859" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1093/pnasnexus/pgae488" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1093/pnasnexus/pgae488" target="10.1126/scirobotics.adc8892">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1093/pnasnexus/pgae488" target="10.1038/s42256-023-00650-4">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1162/netn_a_00435" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1021/acsestwater.3c00152" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.compbiomed.2024.108210" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.chaos.2024.115106" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/iros55552.2023.10342379" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.psep.2024.06.090" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3390/app14199118" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.ress.2024.110540" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1101/2023.08.31.23294925" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1063/5.0191574" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1063/5.0191574" target="10.1007/s12265-024-10504-y">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.neucom.2024.127962" target="10.1038/s42256-022-00556-7">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jcp.2018.10.045" target="10.1016/0893-6080(89)90020-8">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jcp.2018.10.045" target="10.5555/70405.70408">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/0771-050x(81)90010-3" target="10.1016/0771-050x(80)90013-3">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s11831-022-09795-8" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1002/adma.202305254" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.addma.2022.103139" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.matdes.2023.112356" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.resourpol.2023.103892" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmatprotec.2022.117550" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.matdes.2023.111625" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmsy.2022.12.004" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1080/17452759.2024.2390495" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1007/s40544-024-0879-2" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.measurement.2024.115303" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.amf.2025.200198" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.cirpj.2023.08.005" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1080/14783363.2023.2194524" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.cirp.2024.04.102" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.3390/sci6040060" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1080/21693277.2024.2326526" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1109/cvpr52733.2024.00361" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.jmapro.2024.11.066" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+    <edge source="10.1016/j.cie.2024.110272" target="10.1016/j.jmatprotec.2021.117485">
+      <data key="d8">1.0</data>
+    </edge>
+  </graph>
+</graphml>
