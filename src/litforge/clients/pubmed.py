@@ -202,15 +202,19 @@ class PubMedClient(BaseClient):
             pmid_elem = medline.find("PMID")
             pmid = pmid_elem.text if pmid_elem is not None else None
             
-            # Get title
+            # Get title (handle nested elements like <i>, <b>, etc.)
             title_elem = art.find("ArticleTitle")
-            title = title_elem.text if title_elem is not None else "Untitled"
+            if title_elem is not None:
+                # Use itertext() to get all text including nested elements
+                title = "".join(title_elem.itertext()).strip() or "Untitled"
+            else:
+                title = "Untitled"
             
-            # Get abstract
+            # Get abstract (handle nested elements)
             abstract = None
             abstract_elem = art.find("Abstract/AbstractText")
             if abstract_elem is not None:
-                abstract = abstract_elem.text
+                abstract = "".join(abstract_elem.itertext()).strip() or None
             
             # Get authors
             authors = []
@@ -288,7 +292,7 @@ class PubMedClient(BaseClient):
                 publication_date=pub_date,
                 venue=venue,
                 publication_type=PublicationType.ARTICLE,
-                keywords=keywords[:20] if keywords else None,
+                keywords=keywords[:20] if keywords else [],
                 pmid=pmid,
                 pmcid=pmcid,
                 is_open_access=pmcid is not None,

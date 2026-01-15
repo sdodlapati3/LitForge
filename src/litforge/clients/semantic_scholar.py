@@ -177,7 +177,10 @@ class SemanticScholarClient(BaseClient):
             headers=self._get_headers(),
         )
         
-        references = response.get("data", [])
+        if response is None:
+            return []
+        
+        references = response.get("data", []) or []
         return [
             self._parse_paper(r.get("citedPaper", {}))
             for r in references

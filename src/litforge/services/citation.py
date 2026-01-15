@@ -436,9 +436,9 @@ class CitationService:
             return []
         
         # Build cluster membership map
-        node_to_cluster: dict[str, str] = {}
+        node_to_cluster: dict[str, int] = {}
         for cluster in network.clusters:
-            for member_id in cluster.members:
+            for member_id in cluster.papers:
                 node_to_cluster[member_id] = cluster.id
         
         # Count cross-cluster connections for each node
@@ -528,7 +528,7 @@ class CitationService:
                 {
                     "id": cluster.id,
                     "label": cluster.label,
-                    "members": cluster.members,
+                    "members": cluster.papers,
                     "keywords": cluster.keywords,
                 }
                 for cluster in network.clusters
