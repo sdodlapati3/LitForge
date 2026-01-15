@@ -21,25 +21,16 @@ from __future__ import annotations
 
 import asyncio
 import httpx
+import uuid
 from typing import Any, Optional
-from dataclasses import dataclass, field
 from datetime import datetime
 
+# Import the unified Publication model
+from litforge.models.publication import Publication, Author
 
-@dataclass
-class Paper:
-    """Simple paper representation."""
-    title: str
-    authors: list[str] = field(default_factory=list)
-    year: Optional[int] = None
-    doi: Optional[str] = None
-    citations: int = 0
-    venue: str = ""
-    abstract: str = ""
-    url: str = ""
-    
-    def __repr__(self):
-        return f"Paper('{self.title[:50]}...' by {', '.join(self.authors[:2])} ({self.year}))"
+# Paper is an alias for Publication (backwards compatibility)
+# Use Paper for simple usage, Publication for full features
+Paper = Publication
 
 
 class LitForgeClient:
@@ -47,6 +38,17 @@ class LitForgeClient:
     
     def __init__(self):
         self._cache: dict[str, Any] = {}
+        self._llm = None  # Lazy-loaded
+    
+    def _get_llm(self):
+        """Lazy-load LLM for semantic search."""
+        if self._llm is None:
+            try:
+                from litforge.llm import LLMRouter
+                self._llm = LLMRouter()
+            except Exception:
+                pass  # No LLM available - use basic search
+        return self._llm
     
     def search(
         self,
@@ -56,16 +58,21 @@ class LitForgeClient:
         year_from: Optional[int] = None,
         year_to: Optional[int] = None,
         sort_by: str = "citations",  # "citations", "date", "relevance"
+        use_semantic: bool = True,  # Try semantic search first
     ) -> list[Paper]:
         """
         Search for scientific papers.
         
+        Uses semantic search (LLM + embeddings) when available, with
+        fast fallback to basic OpenAlex search.
+        
         Args:
-            query: Search query (e.g., "linear attention transformers")
+            query: Search query (natural language or keywords)
             limit: Maximum number of results
             year_from: Filter papers from this year
             year_to: Filter papers until this year
             sort_by: Sort order ("citations", "date", "relevance")
+            use_semantic: Try semantic search first (default True)
         
         Returns:
             List of Paper objects
@@ -75,55 +82,29 @@ class LitForgeClient:
             >>> for p in papers:
             ...     print(f"{p.title} ({p.year}) - {p.citations} citations")
         """
-        return asyncio.run(self._search_async(query, limit, year_from, year_to, sort_by))
+        # Try semantic search first (LLM understands natural language)
+        if use_semantic:
+            llm = self._get_llm()
+            if llm:
+                try:
+                    from litforge.services.semantic_search import semantic_search
+                    papers, _ = semantic_search(query, llm, max_results=limit)
+                    if papers:
+                        # Apply year filter if specified
+                        if year_from or year_to:
+                            papers = [
+                                p for p in papers
+                                if (not year_from or (p.year and p.year >= year_from)) and
+                                   (not year_to or (p.year and p.year <= year_to))
+                            ]
+                        return papers[:limit]
+                except Exception:
+                    pass  # Fall back to basic search
+        
+        # Basic search fallback (fast, no LLM needed)
+        return asyncio.run(self._basic_search_async(query, limit, year_from, year_to, sort_by))
     
-    def _clean_query(self, query: str) -> str:
-        """Clean natural language query to extract key search terms."""
-        import re
-        
-        # Remove common natural language phrases (multi-word)
-        noise_phrases = [
-            "find me", "list of", "papers on", "papers about", "research on",
-            "show me", "get me", "i want", "i need", "looking for",
-            "articles on", "articles about", "publications on", "publications about",
-            "can you find", "please find", "search for", "give me",
-            "what are", "what is", "tell me about", "explain", "describe",
-            "related to them", "related to it", "related to this",
-            "me all the", "all the papers", "all papers",
-            "can you", "could you", "would you", "please",
-        ]
-        
-        cleaned = query.lower()
-        for phrase in noise_phrases:
-            cleaned = cleaned.replace(phrase, " ")
-        
-        # Remove question marks and other punctuation
-        cleaned = re.sub(r'[?!.,;:]', ' ', cleaned)
-        
-        # Remove common stopwords that hurt search quality
-        stopwords = {
-            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-            'of', 'with', 'by', 'from', 'as', 'is', 'are', 'was', 'were', 'be',
-            'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
-            'would', 'could', 'should', 'may', 'might', 'must', 'shall',
-            'this', 'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their',
-            'me', 'my', 'i', 'we', 'our', 'you', 'your', 'he', 'she', 'his', 'her',
-            'about', 'into', 'through', 'during', 'before', 'after', 'above', 'below',
-            'between', 'under', 'again', 'further', 'then', 'once', 'here', 'there',
-            'when', 'where', 'why', 'how', 'all', 'each', 'every', 'both', 'few',
-            'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only',
-            'own', 'same', 'so', 'than', 'too', 'very', 'just', 'also',
-        }
-        
-        words = cleaned.split()
-        filtered_words = [w for w in words if w not in stopwords and len(w) > 1]
-        
-        # Join back
-        cleaned = " ".join(filtered_words)
-        
-        return cleaned.strip() or query
-    
-    async def _search_async(
+    async def _basic_search_async(
         self,
         query: str,
         limit: int,
@@ -131,12 +112,7 @@ class LitForgeClient:
         year_to: Optional[int],
         sort_by: str,
     ) -> list[Paper]:
-        """Async search implementation."""
-        papers = []
-        
-        # Clean query to extract key terms
-        clean_query = self._clean_query(query)
-        
+        """Basic OpenAlex search (no LLM required)."""
         # Build sort parameter
         sort_map = {
             "citations": "cited_by_count:desc",
@@ -145,7 +121,7 @@ class LitForgeClient:
         }
         sort_param = sort_map.get(sort_by, "cited_by_count:desc")
         
-        # Build filter - use OpenAlex range format
+        # Build year filter
         filters = []
         if year_from and year_to:
             filters.append(f"publication_year:{year_from}-{year_to}")
@@ -154,14 +130,10 @@ class LitForgeClient:
         elif year_to:
             filters.append(f"publication_year:1900-{year_to}")
         
-        # Extract key terms for relevance filtering
-        key_terms = [t.lower() for t in clean_query.split() if len(t) > 2]
-        
         async with httpx.AsyncClient(timeout=30) as client:
-            # Request more to allow for filtering
             params = {
-                "search": clean_query,
-                "per_page": min(limit * 3, 100),  # Get extra for filtering
+                "search": query,
+                "per_page": min(limit, 100),
                 "sort": sort_param,
             }
             if filters:
@@ -170,20 +142,7 @@ class LitForgeClient:
             resp = await client.get("https://api.openalex.org/works", params=params)
             data = resp.json()
             
-            for work in data.get("results", []):
-                paper = self._parse_openalex_work(work)
-                
-                # Score relevance based on title match
-                title_lower = paper.title.lower()
-                relevance_score = sum(1 for term in key_terms if term in title_lower)
-                paper._relevance = relevance_score
-                
-                papers.append(paper)
-            
-            # Sort by relevance first, then citations
-            papers.sort(key=lambda p: (getattr(p, '_relevance', 0), p.citations), reverse=True)
-        
-        return papers[:limit]
+            return [self._parse_openalex_work(work) for work in data.get("results", [])][:limit]
     
     def lookup(self, doi: str) -> Optional[Paper]:
         """
@@ -297,13 +256,19 @@ class LitForgeClient:
         
         return papers
     
-    def _parse_openalex_work(self, work: dict) -> Paper:
-        """Parse OpenAlex work to Paper."""
+    def _parse_openalex_work(self, work: dict) -> Publication:
+        """Parse OpenAlex work to Publication."""
+        # Parse authors as Author objects
         authors = []
-        for a in work.get("authorships", []):
-            name = a.get("author", {}).get("display_name", "")
+        for i, a in enumerate(work.get("authorships", [])):
+            author_data = a.get("author", {})
+            name = author_data.get("display_name", "")
             if name:
-                authors.append(name)
+                authors.append(Author(
+                    name=name,
+                    openalex_id=author_data.get("id"),
+                    position=i + 1,
+                ))
         
         venue = ""
         loc = work.get("primary_location", {})
@@ -329,24 +294,40 @@ class LitForgeClient:
         if doi:
             doi = doi.replace("https://doi.org/", "")
         
-        return Paper(
+        # Generate ID from OpenAlex ID or DOI
+        openalex_id = work.get("id", "")
+        paper_id = openalex_id.split("/")[-1] if openalex_id else (doi or str(uuid.uuid4())[:8])
+        
+        return Publication(
+            id=paper_id,
             title=work.get("title") or "Unknown",
             authors=authors,
             year=work.get("publication_year"),
-            doi=doi,
-            citations=work.get("cited_by_count", 0),
-            venue=venue,
-            abstract=abstract,
-            url=work.get("id", ""),
+            doi=doi or None,
+            citation_count=work.get("cited_by_count", 0),
+            venue=venue or None,
+            abstract=abstract or None,
+            url=openalex_id or None,
+            openalex_id=openalex_id or None,
+            sources=["openalex"],
         )
     
-    def _parse_crossref_work(self, work: dict) -> Paper:
-        """Parse CrossRef work to Paper."""
+    def _parse_crossref_work(self, work: dict) -> Publication:
+        """Parse CrossRef work to Publication."""
+        # Parse authors as Author objects
         authors = []
-        for a in work.get("author", []):
-            name = f"{a.get('given', '')} {a.get('family', '')}".strip()
+        for i, a in enumerate(work.get("author", [])):
+            given = a.get("given", "")
+            family = a.get("family", "")
+            name = f"{given} {family}".strip()
             if name:
-                authors.append(name)
+                authors.append(Author(
+                    name=name,
+                    given_name=given or None,
+                    family_name=family or None,
+                    orcid=a.get("ORCID"),
+                    position=i + 1,
+                ))
         
         title = work.get("title", [""])[0] if work.get("title") else "Unknown"
         
@@ -357,16 +338,19 @@ class LitForgeClient:
             year = work["published-online"]["date-parts"][0][0]
         
         venue = work.get("container-title", [""])[0] if work.get("container-title") else ""
+        doi = work.get("DOI", "")
         
-        return Paper(
+        return Publication(
+            id=doi or str(uuid.uuid4())[:8],
             title=title,
             authors=authors,
             year=year,
-            doi=work.get("DOI", ""),
-            citations=work.get("is-referenced-by-count", 0),
-            venue=venue,
-            abstract=work.get("abstract", ""),
-            url=work.get("URL", ""),
+            doi=doi or None,
+            citation_count=work.get("is-referenced-by-count", 0),
+            venue=venue or None,
+            abstract=work.get("abstract") or None,
+            url=work.get("URL") or None,
+            sources=["crossref"],
         )
 
 
