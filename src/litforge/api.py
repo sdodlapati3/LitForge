@@ -79,20 +79,47 @@ class LitForgeClient:
     
     def _clean_query(self, query: str) -> str:
         """Clean natural language query to extract key search terms."""
-        # Remove common natural language phrases
+        import re
+        
+        # Remove common natural language phrases (multi-word)
         noise_phrases = [
             "find me", "list of", "papers on", "papers about", "research on",
             "show me", "get me", "i want", "i need", "looking for",
             "articles on", "articles about", "publications on", "publications about",
             "can you find", "please find", "search for", "give me",
+            "what are", "what is", "tell me about", "explain", "describe",
+            "related to them", "related to it", "related to this",
+            "me all the", "all the papers", "all papers",
+            "can you", "could you", "would you", "please",
         ]
         
         cleaned = query.lower()
         for phrase in noise_phrases:
             cleaned = cleaned.replace(phrase, " ")
         
-        # Clean up whitespace
-        cleaned = " ".join(cleaned.split())
+        # Remove question marks and other punctuation
+        cleaned = re.sub(r'[?!.,;:]', ' ', cleaned)
+        
+        # Remove common stopwords that hurt search quality
+        stopwords = {
+            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+            'of', 'with', 'by', 'from', 'as', 'is', 'are', 'was', 'were', 'be',
+            'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
+            'would', 'could', 'should', 'may', 'might', 'must', 'shall',
+            'this', 'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their',
+            'me', 'my', 'i', 'we', 'our', 'you', 'your', 'he', 'she', 'his', 'her',
+            'about', 'into', 'through', 'during', 'before', 'after', 'above', 'below',
+            'between', 'under', 'again', 'further', 'then', 'once', 'here', 'there',
+            'when', 'where', 'why', 'how', 'all', 'each', 'every', 'both', 'few',
+            'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only',
+            'own', 'same', 'so', 'than', 'too', 'very', 'just', 'also',
+        }
+        
+        words = cleaned.split()
+        filtered_words = [w for w in words if w not in stopwords and len(w) > 1]
+        
+        # Join back
+        cleaned = " ".join(filtered_words)
         
         return cleaned.strip() or query
     
