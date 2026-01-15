@@ -642,6 +642,16 @@ def main():
                                 with col3:
                                     st.metric("🔬 Clusters", len(network.clusters))
                                 
+                                # Interactive network visualization
+                                st.markdown("**🕸️ Interactive Citation Network:**")
+                                st.caption("🖱️ Drag nodes • Scroll to zoom • Hover for details • Gold = seed paper")
+                                try:
+                                    import streamlit.components.v1 as components
+                                    html = citation_service.to_pyvis_html(network, height="500px")
+                                    components.html(html, height=520, scrolling=False)
+                                except Exception as viz_err:
+                                    st.warning(f"Visualization not available: {viz_err}")
+                                
                                 # Most influential papers
                                 st.markdown("**🏆 Most Influential Papers (by PageRank):**")
                                 key_papers = citation_service.find_key_papers(network, metric='pagerank', limit=10)
@@ -649,20 +659,58 @@ def main():
                                     if p:
                                         title = p.title[:55] + '...' if len(p.title) > 55 else p.title
                                         cites = getattr(p, 'citation_count', 0) or 0
-                                        st.caption(f"{i}. {title} ({cites:,} citations)")
+                                        year = getattr(p, 'year', '?')
+                                        doi = getattr(p, 'doi', None)
+                                        if doi:
+                                            st.markdown(f"{i}. [{title}](https://doi.org/{doi}) ({year}) - {cites:,} citations")
+                                        else:
+                                            st.caption(f"{i}. {title} ({year}) - {cites:,} citations")
                                 
-                                # Export options
+                                # Export options - CSV is most Mac-friendly
                                 st.markdown("**📥 Export Network:**")
-                                col1, col2 = st.columns(2)
+                                col1, col2, col3 = st.columns(3)
                                 
+                                # CSV export (opens easily on Mac)
+                                try:
+                                    import pandas as pd
+                                    nodes_data = []
+                                    for node_id, node in network.nodes.items():
+                                        pub = node.publication
+                                        if pub:
+                                            nodes_data.append({
+                                                'id': node_id,
+                                                'title': pub.title,
+                                                'year': getattr(pub, 'year', None),
+                                                'citations': getattr(pub, 'citation_count', 0) or 0,
+                                                'doi': getattr(pub, 'doi', None),
+                                                'pagerank': node.pagerank or 0,
+                                                'in_degree': node.in_degree,
+                                                'out_degree': node.out_degree,
+                                                'is_seed': node.is_seed,
+                                            })
+                                    nodes_df = pd.DataFrame(nodes_data)
+                                    nodes_csv = nodes_df.to_csv(index=False)
+                                    
+                                    with col1:
+                                        st.download_button(
+                                            "📊 CSV (Excel)",
+                                            nodes_csv,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.csv",
+                                            "text/csv",
+                                            key=f"net_csv_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"CSV export error: {e}")
+                                
+                                # JSON export
                                 try:
                                     import json
                                     from networkx.readwrite import json_graph
                                     G = network.to_networkx()
                                     network_json = json.dumps(json_graph.node_link_data(G, edges='links'), indent=2)
-                                    with col1:
+                                    with col2:
                                         st.download_button(
-                                            "📊 Download JSON",
+                                            "🔧 JSON",
                                             network_json,
                                             f"citation_network_{datetime.now().strftime('%Y%m%d')}.json",
                                             "application/json",
@@ -671,6 +719,7 @@ def main():
                                 except Exception as e:
                                     st.caption(f"JSON export error: {e}")
                                 
+                                # GraphML export (for Gephi - tell user how to open)
                                 try:
                                     import tempfile
                                     import networkx as nx
@@ -679,9 +728,9 @@ def main():
                                         nx.write_graphml(G, f.name)
                                         with open(f.name, 'r') as gf:
                                             graphml_data = gf.read()
-                                    with col2:
+                                    with col3:
                                         st.download_button(
-                                            "🕸️ Download GraphML",
+                                            "🕸️ GraphML",
                                             graphml_data,
                                             f"citation_network_{datetime.now().strftime('%Y%m%d')}.graphml",
                                             "application/xml",
@@ -689,6 +738,8 @@ def main():
                                         )
                                 except Exception as e:
                                     st.caption(f"GraphML export error: {e}")
+                                
+                                st.caption("💡 **Tip:** CSV opens in Excel/Numbers. GraphML opens in [Gephi](https://gephi.org) (free graph viewer)")
                                 
                                 response = f"Built citation network for '{seed_paper.title}' with {network.num_nodes} papers and {network.num_edges} citation links."
                                 st.session_state.messages.append({"role": "assistant", "content": response})
@@ -737,6 +788,16 @@ def main():
                                 # Show seed paper
                                 st.markdown(f"**🌱 Seed Paper:** {seed_paper.title}")
                                 
+                                # Interactive network visualization
+                                st.markdown("**🕸️ Interactive Citation Network:**")
+                                st.caption("🖱️ Drag nodes • Scroll to zoom • Hover for details • Gold = seed paper")
+                                try:
+                                    import streamlit.components.v1 as components
+                                    html = citation_service.to_pyvis_html(network, height="500px")
+                                    components.html(html, height=520, scrolling=False)
+                                except Exception as viz_err:
+                                    st.warning(f"Visualization not available: {viz_err}")
+                                
                                 # Most influential papers
                                 st.markdown("**🏆 Most Influential Papers (by PageRank):**")
                                 key_papers = citation_service.find_key_papers(network, metric='pagerank', limit=10)
@@ -744,11 +805,48 @@ def main():
                                     if p:
                                         title = p.title[:55] + '...' if len(p.title) > 55 else p.title
                                         cites = getattr(p, 'citation_count', 0) or 0
-                                        st.caption(f"{i}. {title} ({cites:,} citations)")
+                                        year = getattr(p, 'year', '?')
+                                        doi = getattr(p, 'doi', None)
+                                        if doi:
+                                            st.markdown(f"{i}. [{title}](https://doi.org/{doi}) ({year}) - {cites:,} citations")
+                                        else:
+                                            st.caption(f"{i}. {title} ({year}) - {cites:,} citations")
                                 
-                                # Export options
+                                # Export options - CSV is most Mac-friendly
                                 st.markdown("**📥 Export Network:**")
-                                col1, col2 = st.columns(2)
+                                col1, col2, col3 = st.columns(3)
+                                
+                                # CSV export (opens easily on Mac)
+                                try:
+                                    import pandas as pd
+                                    nodes_data = []
+                                    for node_id, node in network.nodes.items():
+                                        pub = node.publication
+                                        if pub:
+                                            nodes_data.append({
+                                                'id': node_id,
+                                                'title': pub.title,
+                                                'year': getattr(pub, 'year', None),
+                                                'citations': getattr(pub, 'citation_count', 0) or 0,
+                                                'doi': getattr(pub, 'doi', None),
+                                                'pagerank': node.pagerank or 0,
+                                                'in_degree': node.in_degree,
+                                                'out_degree': node.out_degree,
+                                                'is_seed': node.is_seed,
+                                            })
+                                    nodes_df = pd.DataFrame(nodes_data)
+                                    nodes_csv = nodes_df.to_csv(index=False)
+                                    
+                                    with col1:
+                                        st.download_button(
+                                            "📊 CSV (Excel)",
+                                            nodes_csv,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.csv",
+                                            "text/csv",
+                                            key=f"net2_csv_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"CSV export error: {e}")
                                 
                                 # Export as JSON
                                 try:
@@ -756,13 +854,13 @@ def main():
                                     from networkx.readwrite import json_graph
                                     G = network.to_networkx()
                                     network_json = json.dumps(json_graph.node_link_data(G, edges='links'), indent=2)
-                                    with col1:
+                                    with col2:
                                         st.download_button(
-                                            "📊 Download JSON",
+                                            "🔧 JSON",
                                             network_json,
                                             f"citation_network_{datetime.now().strftime('%Y%m%d')}.json",
                                             "application/json",
-                                            key=f"net_json_{datetime.now().timestamp()}"
+                                            key=f"net2_json_{datetime.now().timestamp()}"
                                         )
                                 except Exception as e:
                                     st.caption(f"JSON export error: {e}")
@@ -774,19 +872,20 @@ def main():
                                     G = network.to_networkx()
                                     with tempfile.NamedTemporaryFile(mode='w', suffix='.graphml', delete=False) as f:
                                         nx.write_graphml(G, f.name)
-                                        f.seek(0)
                                         with open(f.name, 'r') as gf:
                                             graphml_data = gf.read()
-                                    with col2:
+                                    with col3:
                                         st.download_button(
-                                            "🕸️ Download GraphML",
+                                            "🕸️ GraphML",
                                             graphml_data,
                                             f"citation_network_{datetime.now().strftime('%Y%m%d')}.graphml",
                                             "application/xml",
-                                            key=f"net_graphml_{datetime.now().timestamp()}"
+                                            key=f"net2_graphml_{datetime.now().timestamp()}"
                                         )
                                 except Exception as e:
                                     st.caption(f"GraphML export error: {e}")
+                                
+                                st.caption("💡 **Tip:** CSV opens in Excel/Numbers. GraphML opens in [Gephi](https://gephi.org) (free graph viewer)")
                                 
                                 response = f"Built citation network with {network.num_nodes} papers and {network.num_edges} citation links."
                                 st.session_state.messages.append({"role": "assistant", "content": response})

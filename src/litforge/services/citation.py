@@ -644,3 +644,169 @@ class CitationService:
             "total_citations": sum(citations) if citations else 0,
             "avg_citations": round(sum(citations) / len(citations), 1) if citations else 0,
         }
+
+    def to_pyvis_html(
+        self,
+        network: CitationNetwork,
+        height: str = "600px",
+        width: str = "100%",
+        bgcolor: str = "#1a1a2e",
+        font_color: str = "#ffffff",
+    ) -> str:
+        """
+        Generate interactive HTML visualization using Pyvis.
+        
+        Creates a force-directed graph with:
+        - Node size based on citation count
+        - Node color based on cluster
+        - Hover info showing paper details
+        - Drag, zoom, and pan interactions
+        
+        Args:
+            network: Citation network to visualize
+            height: Height of the visualization
+            width: Width of the visualization  
+            bgcolor: Background color
+            font_color: Font color for labels
+            
+        Returns:
+            HTML string that can be embedded in Streamlit
+        """
+        try:
+            from pyvis.network import Network as PyvisNetwork
+        except ImportError:
+            raise ImportError("Pyvis is required for interactive visualization. Install with: pip install pyvis")
+        
+        # Create pyvis network
+        net = PyvisNetwork(
+            height=height,
+            width=width,
+            bgcolor=bgcolor,
+            font_color=font_color,
+            directed=True,
+            notebook=False,
+            cdn_resources='remote',  # Use CDN for vis.js
+        )
+        
+        # Physics settings for better layout
+        net.set_options("""
+        {
+            "nodes": {
+                "font": {"size": 12, "face": "arial"},
+                "scaling": {"min": 10, "max": 50}
+            },
+            "edges": {
+                "arrows": {"to": {"enabled": true, "scaleFactor": 0.5}},
+                "color": {"opacity": 0.5},
+                "smooth": {"type": "continuous"}
+            },
+            "physics": {
+                "forceAtlas2Based": {
+                    "gravitationalConstant": -50,
+                    "centralGravity": 0.01,
+                    "springLength": 100,
+                    "springConstant": 0.08
+                },
+                "maxVelocity": 50,
+                "solver": "forceAtlas2Based",
+                "timestep": 0.35,
+                "stabilization": {"iterations": 150}
+            },
+            "interaction": {
+                "hover": true,
+                "tooltipDelay": 100,
+                "hideEdgesOnDrag": true,
+                "navigationButtons": true,
+                "keyboard": {"enabled": true}
+            }
+        }
+        """)
+        
+        # Color palette for clusters
+        cluster_colors = [
+            "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6",
+            "#1abc9c", "#e91e63", "#00bcd4", "#ff5722", "#607d8b",
+            "#8bc34a", "#ffc107", "#795548", "#673ab7", "#03a9f4",
+        ]
+        
+        # Build cluster ID to color mapping
+        cluster_map: dict[str, str] = {}
+        for i, cluster in enumerate(network.clusters):
+            color = cluster_colors[i % len(cluster_colors)]
+            for node_id in cluster.papers:
+                cluster_map[node_id] = color
+        
+        # Add nodes
+        for node_id, node in network.nodes.items():
+            pub = node.publication
+            if not pub:
+                continue
+            
+            # Node size based on citations (log scale)
+            citations = getattr(pub, 'citation_count', 0) or 0
+            import math
+            size = 10 + min(40, math.log(citations + 1) * 5)
+            
+            # Node color based on cluster or seed status
+            if node.is_seed:
+                color = "#FFD700"  # Gold for seed papers
+                border_color = "#FFA500"
+                border_width = 3
+            else:
+                color = cluster_map.get(node_id, "#6c757d")
+                border_color = color
+                border_width = 1
+            
+            # Build hover title
+            year = getattr(pub, 'year', 'Unknown')
+            doi = getattr(pub, 'doi', None)
+            title_short = pub.title[:80] + '...' if len(pub.title) > 80 else pub.title
+            pagerank_str = f"{node.pagerank:.4f}" if node.pagerank else "N/A"
+            
+            hover_html = f"""
+            <div style="max-width: 300px; padding: 10px;">
+                <b>{pub.title}</b><br>
+                <small>Year: {year}</small><br>
+                <small>Citations: {citations:,}</small><br>
+                <small>PageRank: {pagerank_str}</small>
+                {f'<br><small>DOI: {doi}</small>' if doi else ''}
+            </div>
+            """
+            
+            # Label: short title
+            label = title_short[:30] + '...' if len(title_short) > 30 else title_short
+            
+            net.add_node(
+                node_id,
+                label=label,
+                title=hover_html,
+                size=size,
+                color={
+                    "background": color,
+                    "border": border_color,
+                    "highlight": {"background": "#ffffff", "border": color}
+                },
+                borderWidth=border_width,
+                font={"size": 10, "color": font_color},
+            )
+        
+        # Add edges
+        for edge in network.edges:
+            if edge.source in network.nodes and edge.target in network.nodes:
+                net.add_edge(
+                    edge.source,
+                    edge.target,
+                    color={"color": "#666666", "opacity": 0.6},
+                    width=1,
+                )
+        
+        # Generate HTML
+        html = net.generate_html()
+        
+        # Fix for Streamlit iframe embedding - remove scrollbars
+        html = html.replace(
+            '<body>',
+            '<body style="margin:0; padding:0; overflow:hidden;">'
+        )
+        
+        return html
