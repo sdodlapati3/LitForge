@@ -14,9 +14,21 @@ def get_faiss_store():
     from litforge.stores.faiss import FAISSStore
     return FAISSStore
 
+def get_embedding_index(name: str = "default"):
+    """Get EmbeddingIndex for local paper similarity search."""
+    from litforge.stores.embedding_index import get_embedding_index as _get
+    return _get(name)
+
+def get_embedding_index_manager():
+    """Get EmbeddingIndexManager for managing multiple indices."""
+    from litforge.stores.embedding_index import EmbeddingIndexManager
+    return EmbeddingIndexManager()
+
 __all__ = [
     "BaseVectorStore",
     "ChromaDBStore",
     "get_qdrant_store",
     "get_faiss_store",
+    "get_embedding_index",
+    "get_embedding_index_manager",
 ]
