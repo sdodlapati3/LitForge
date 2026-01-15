@@ -55,6 +55,7 @@ class SemanticScholarClient(BaseClient):
         query: str,
         limit: int = 25,
         filters: SearchFilter | None = None,
+        include_embedding: bool = False,
     ) -> list[Publication]:
         """
         Search for papers.
@@ -63,16 +64,22 @@ class SemanticScholarClient(BaseClient):
             query: Search query
             limit: Maximum results
             filters: Optional filters
+            include_embedding: If True, include SPECTER2 embeddings
             
         Returns:
             List of publications
         """
+        fields = ("paperId,externalIds,title,abstract,year,authors,"
+                  "venue,publicationDate,citationCount,openAccessPdf,"
+                  "fieldsOfStudy")
+        
+        if include_embedding:
+            fields += ",embedding"
+        
         params = {
             "query": query,
             "limit": min(limit, 100),
-            "fields": "paperId,externalIds,title,abstract,year,authors,"
-                     "venue,publicationDate,citationCount,openAccessPdf,"
-                     "fieldsOfStudy",
+            "fields": fields,
         }
         
         if filters:
@@ -254,7 +261,13 @@ class SemanticScholarClient(BaseClient):
         ss_id = data.get("paperId", "")
         internal_id = f"s2:{ss_id}" if ss_id else f"s2:{hash(data.get('title', ''))}"
         
-        return Publication(
+        # Extract embedding if present
+        embedding = None
+        embed_data = data.get("embedding")
+        if embed_data and isinstance(embed_data, dict):
+            embedding = embed_data.get("vector")
+        
+        pub = Publication(
             id=internal_id,
             title=data.get("title", "Untitled"),
             authors=authors,
@@ -274,3 +287,98 @@ class SemanticScholarClient(BaseClient):
             is_open_access=pdf_url is not None,
             sources=["semantic_scholar"],
         )
+        
+        # Store embedding as extra attribute
+        if embedding:
+            pub._embedding = embedding
+        
+        return pub
+    
+    def get_embedding(
+        self,
+        paper_id: str,
+    ) -> list[float] | None:
+        """
+        Get SPECTER2 embedding for a paper.
+        
+        Args:
+            paper_id: Semantic Scholar paper ID or DOI (prefixed with DOI:)
+            
+        Returns:
+            768-dimensional embedding vector or None
+        """
+        try:
+            response = self._get(
+                f"/graph/v1/paper/{paper_id}",
+                params={"fields": "embedding"},
+                headers=self._get_headers(),
+            )
+            
+            embed_data = response.get("embedding")
+            if embed_data and isinstance(embed_data, dict):
+                return embed_data.get("vector")
+            return None
+        except Exception as e:
+            logger.debug(f"Failed to get embedding for {paper_id}: {e}")
+            return None
+    
+    def get_embeddings_batch(
+        self,
+        paper_ids: list[str],
+    ) -> dict[str, list[float]]:
+        """
+        Get SPECTER2 embeddings for multiple papers.
+        
+        Args:
+            paper_ids: List of Semantic Scholar paper IDs
+            
+        Returns:
+            Dict mapping paper_id -> embedding vector
+        """
+        if not paper_ids:
+            return {}
+        
+        # Batch API endpoint
+        try:
+            response = self._post(
+                "/graph/v1/paper/batch",
+                json_data={"ids": paper_ids[:500]},  # API limit
+                params={"fields": "paperId,embedding"},
+                headers=self._get_headers(),
+            )
+            
+            result = {}
+            for paper in response:
+                if paper and paper.get("paperId"):
+                    embed_data = paper.get("embedding")
+                    if embed_data and isinstance(embed_data, dict):
+                        result[paper["paperId"]] = embed_data.get("vector", [])
+            
+            return result
+        except Exception as e:
+            logger.warning(f"Batch embedding request failed: {e}")
+            return {}
+    
+    def search_by_embedding(
+        self,
+        embedding: list[float],
+        limit: int = 20,
+    ) -> list[Publication]:
+        """
+        Search for similar papers using an embedding vector.
+        
+        Note: This is not directly supported by S2 API, but we can use
+        recommendations API with a seed paper. For true embedding search,
+        use local index.
+        
+        Args:
+            embedding: Query embedding vector
+            limit: Maximum results
+            
+        Returns:
+            List of similar publications
+        """
+        # S2 doesn't have direct embedding search API
+        # This would need a local index - see stores/embedding_index.py
+        logger.warning("Direct embedding search requires local index. Use get_recommendations() instead.")
+        return []
