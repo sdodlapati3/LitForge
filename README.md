@@ -2,7 +2,6 @@
 
 **Forging Knowledge from Literature**
 
-[![PyPI version](https://badge.fury.io/py/litforge.svg)](https://badge.fury.io/py/litforge)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -12,9 +11,11 @@ An open-source Python library for unified scientific literature search, retrieva
 ## ✨ Features
 
 - **🔍 Unified Search** - Query 250M+ papers across OpenAlex, Semantic Scholar, PubMed, arXiv, and more with a single API
-- **📥 Smart Retrieval** - Download full-text PDFs from Unpaywall, PMC, arXiv, and other open access sources
+- **🧠 Semantic Search** - LLM-powered query understanding with embedding-based retrieval (like Elicit/Consensus)
 - **📊 Citation Networks** - Build and analyze citation graphs, find key papers, discover research clusters
-- **🧠 Knowledge Base** - Index papers with semantic embeddings for RAG-powered Q&A
+- **🔄 Multi-Provider LLM** - Free-tier cascade through Cerebras → Groq → Google → OpenAI
+- **📈 Ensemble Scoring** - Smart ranking with keyword, embedding, citation, and recency signals
+- **💬 Chat Interface** - Streamlit-based conversational literature search
 - **🤖 AI-Ready** - First-class support for MCP (Claude), CrewAI, LangGraph, and custom agents
 - **🔌 Pluggable** - Swap vector stores, LLMs, and data sources without code changes
 
@@ -23,70 +24,112 @@ An open-source Python library for unified scientific literature search, retrieva
 ### Installation
 
 ```bash
-# Basic installation
-pip install litforge
+# Clone and install in development mode
+git clone https://github.com/sdodlapati3/LitForge.git
+cd LitForge
+pip install -e ".[dev]"
 
-# With local embeddings (no API keys needed)
-pip install litforge[local]
+# Set up API keys in .env file
+cp .env.example .env
+# Edit .env with your API keys (Cerebras, Groq, Google are FREE)
+```
 
-# Full installation with all features
-pip install litforge[all]
+### Environment Variables
+
+```bash
+# Free LLM providers (recommended)
+CEREBRAS_API_KEY=csk-...     # 14,400 req/day FREE (best free tier)
+GROQ_API_KEY=gsk_...         # 1,000+ req/day FREE (fastest)
+GOOGLE_API_KEY=AIza...       # 250 req/day FREE (Gemini)
+
+# Paid fallback
+OPENAI_API_KEY=sk-...        # Paid, but most reliable
 ```
 
 ### Basic Usage
 
 ```python
-from litforge import Forge
+from litforge.api import search, lookup, citations
 
-# Initialize LitForge
-forge = Forge()
+# Search for papers (uses LLM-powered semantic search)
+papers = search("liquid foundation models")  # Understands → Liquid Neural Networks
 
-# Search for papers
-papers = forge.search("CRISPR gene editing mechanisms", limit=50)
+# Look up by DOI
+paper = lookup("10.1609/aaai.v35i9.16936")
 
-# Download full text (automatically finds open access versions)
-for paper in papers[:5]:
-    forge.retrieve(paper)
-
-# Build a knowledge base
-forge.index(papers)
-
-# Ask questions
-answer = forge.ask("What are the main mechanisms of CRISPR-Cas9?")
-print(answer.text)
-print(f"Sources: {answer.citations}")
+# Get citing papers
+citing = citations("10.1609/aaai.v35i9.16936")
 ```
+
+### Chat Interface
+
+```bash
+# Start the web UI
+./scripts/start_ui.sh chat
+
+# Access at http://localhost:8503
+```
+
+**Try these commands:**
+- `Find papers on CRISPR gene editing`
+- `citation network for Liquid Time-constant Networks`
+- `Download first 10 as CSV`
+- `Export as BibTeX`
 
 ### Citation Networks
 
 ```python
-from litforge import Forge
+from litforge.api import search
+from litforge.services.citation import CitationService
 
-forge = Forge()
-
-# Get a seed paper
-paper = forge.lookup(doi="10.1126/science.aad5227")  # Original CRISPR paper
+# Find a seed paper
+papers = search("Liquid Time-constant Networks", limit=5)
+seed = papers[0]
 
 # Build citation network
-network = forge.build_network(
-    seeds=[paper],
+citation_service = CitationService()
+network = citation_service.build_network(
+    seed_papers=[seed],
     depth=2,           # How many citation levels to traverse
-    max_papers=500     # Limit total papers
+    max_papers=100     # Limit total papers
 )
 
-# Find influential papers
-influential = network.most_cited(n=10)
+# Network stats
+print(f"Papers: {network.num_nodes}, Citations: {network.num_edges}")
 
-# Find research clusters
-clusters = network.find_clusters()
-for cluster in clusters:
-    print(f"Cluster: {cluster.label}, Papers: {len(cluster.papers)}")
+# Find influential papers (by PageRank)
+key_papers = citation_service.find_key_papers(network, metric='pagerank', limit=10)
 
 # Export for visualization
-network.export("crispr_network.graphml")  # For Gephi, Cytoscape
+network.export("network.graphml")  # For Gephi, Cytoscape
+network.export("network.json")     # For web visualization
+```
+
+### Semantic Search (LLM-First)
+
+```python
+from litforge.services.semantic_search import semantic_search
+from litforge.llm.router import get_llm
+
+# Get LLM (auto-selects from available providers)
+llm = get_llm()
+
+# Search with natural language - LLM understands intent
+papers, metadata = semantic_search(
+    query="papers about liquid foundation models",  # → Liquid Neural Networks
+    llm=llm,
+    max_results=25,
+    use_recommendations=True,  # Use SPECTER2 embeddings
+)
+
+# See what LLM understood
+print(metadata["understanding"]["explanation"])
+# "The user is asking about Liquid Neural Networks, a type of continuous-depth neural network..."
 ```
 
 ### With AI Agents (MCP / Claude)
+
+LitForge includes an MCP server for use with Claude Desktop:
 
 ```json
 // claude_desktop_config.json
@@ -96,7 +139,8 @@ network.export("crispr_network.graphml")  # For Gephi, Cytoscape
       "command": "python",
       "args": ["-m", "litforge.mcp"],
       "env": {
-        "OPENAI_API_KEY": "sk-..."
+        "CEREBRAS_API_KEY": "csk-...",
+        "GROQ_API_KEY": "gsk_..."
       }
     }
   }
@@ -108,30 +152,6 @@ Then in Claude:
 Search for papers on "transformer attention mechanisms" and summarize the key findings
 ```
 
-### With CrewAI
-
-```python
-from crewai import Agent, Task, Crew
-from litforge.integrations.crewai import LitForgeTools
-
-# Get LitForge tools for CrewAI
-tools = LitForgeTools()
-
-researcher = Agent(
-    role="Literature Researcher",
-    goal="Find and synthesize relevant papers",
-    tools=tools.all(),  # search, retrieve, cite, ask
-)
-
-task = Task(
-    description="Research the current state of protein folding prediction",
-    agent=researcher,
-)
-
-crew = Crew(agents=[researcher], tasks=[task])
-result = crew.kickoff()
-```
-
 ## 📦 Architecture
 
 ```
@@ -140,12 +160,12 @@ result = crew.kickoff()
 ├─────────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────────────────────────────────────────┐│
 │  │                        Interface Layer                          ││
-│  │   Python SDK  │  MCP Server  │  REST API  │  CLI                ││
+│  │   Python API  │  MCP Server  │  Chat UI  │  CLI                 ││
 │  └─────────────────────────────────────────────────────────────────┘│
 │                                  ↓                                   │
 │  ┌─────────────────────────────────────────────────────────────────┐│
 │  │                        Service Layer                            ││
-│  │  Discovery  │  Retrieval  │  Citation  │  Knowledge  │  QA      ││
+│  │  Discovery │ Semantic Search │ RAG Search │ Citation │ Scoring  ││
 │  └─────────────────────────────────────────────────────────────────┘│
 │                                  ↓                                   │
 │  ┌─────────────────────────────────────────────────────────────────┐│
@@ -154,98 +174,66 @@ result = crew.kickoff()
 │  └─────────────────────────────────────────────────────────────────┘│
 │                                  ↓                                   │
 │  ┌─────────────────────────────────────────────────────────────────┐│
-│  │                         Data Layer                              ││
-│  │  Vector Store  │  Document Store  │  Graph Store  │  Cache      ││
-│  │  (ChromaDB)      (SQLite)          (NetworkX)      (DiskCache)  ││
+│  │                         LLM Router                              ││
+│  │  Cerebras (70B) → Groq (70B) → Google (Gemini) → OpenAI         ││
+│  │  (Free, fastest)   (Free)      (Free)            (Paid fallback)││
 │  └─────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 🔧 Configuration
 
-LitForge can be configured via environment variables or a config file:
+LitForge uses a `.env` file for configuration:
 
 ```bash
-# Environment variables
-export LITFORGE_OPENAI_API_KEY="sk-..."
-export LITFORGE_DEFAULT_SOURCES="openalex,semantic_scholar"
-export LITFORGE_CACHE_DIR="~/.litforge/cache"
-export LITFORGE_EMBEDDING_MODEL="text-embedding-3-small"
+# .env file in project root
+
+# Free LLM providers (recommended - no cost!)
+CEREBRAS_API_KEY=csk-...     # 14,400 req/day FREE - https://cloud.cerebras.ai
+GROQ_API_KEY=gsk_...         # 1,000+ req/day FREE - https://console.groq.com  
+GOOGLE_API_KEY=AIza...       # 250 req/day FREE - https://aistudio.google.com
+
+# Paid fallback (optional)
+OPENAI_API_KEY=sk-...        # Paid - https://platform.openai.com
+
+# Data source API keys (optional, increases rate limits)
+SEMANTIC_SCHOLAR_API_KEY=... # Optional - https://www.semanticscholar.org/product/api
 ```
 
-Or via `litforge.yaml`:
+## 🔌 Key Components
 
-```yaml
-# litforge.yaml
-sources:
-  default: [openalex, semantic_scholar, pubmed]
-  openalex:
-    email: your@email.com  # For polite pool (higher rate limits)
+### LLM Router (Free-Tier Cascade)
 
-embeddings:
-  provider: openai  # or "local" for sentence-transformers
-  model: text-embedding-3-small
-
-vector_store:
-  provider: chroma  # or "qdrant", "faiss"
-  persist_dir: ~/.litforge/vectors
-
-llm:
-  provider: openai
-  model: gpt-4o-mini
-
-cache:
-  enabled: true
-  dir: ~/.litforge/cache
-  ttl: 86400  # 24 hours
-```
-
-## 🔌 Pluggable Components
-
-### Vector Stores
+LitForge automatically routes through free LLM providers:
 
 ```python
-# ChromaDB (default, embedded)
-forge = Forge(vector_store="chroma")
+from litforge.llm.router import get_llm
 
-# Qdrant (cloud or self-hosted)
-forge = Forge(vector_store="qdrant", qdrant_url="http://localhost:6333")
+# Auto-selects best available provider
+llm = get_llm()  # Cerebras → Groq → Google → OpenAI
 
-# FAISS (high performance)
-forge = Forge(vector_store="faiss")
+# Use for query understanding, verification, etc.
+response = llm.complete("Explain CRISPR in one sentence")
 ```
 
-### Embedding Providers
+### Ensemble Scoring
+
+Smart ranking combining multiple signals:
 
 ```python
-# OpenAI (cloud-first, default)
-forge = Forge(embeddings="openai")
+from litforge.services.scoring import EnsembleScorer
 
-# Local (no API key needed)
-forge = Forge(embeddings="local")  # Uses sentence-transformers
-
-# Custom
-from litforge.embeddings import EmbeddingProvider
-
-class MyEmbeddings(EmbeddingProvider):
-    def embed(self, texts: list[str]) -> list[list[float]]:
-        # Your implementation
-        pass
-
-forge = Forge(embeddings=MyEmbeddings())
-```
-
-### LLM Providers
-
-```python
-# OpenAI (default)
-forge = Forge(llm="openai")
-
-# Anthropic
-forge = Forge(llm="anthropic")
-
-# Local (Ollama)
-forge = Forge(llm="ollama", ollama_model="llama3.2")
+scorer = EnsembleScorer()
+scored_papers = scorer.score(
+    papers=papers,
+    query="transformer attention",
+    weights={
+        "keyword": 0.3,      # BM25-style matching
+        "embedding": 0.3,    # SPECTER2 similarity
+        "citation": 0.25,    # Citation count
+        "recency": 0.15,     # Publication date
+    }
+)
 ```
 
 ## 📊 Supported Data Sources
