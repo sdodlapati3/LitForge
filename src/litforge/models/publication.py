@@ -195,6 +195,11 @@ class Publication(BaseModel):
         """Get list of author names."""
         return [a.name for a in self.authors]
     
+    @property
+    def citations(self) -> int:
+        """Alias for citation_count (backwards compatibility with simple API)."""
+        return self.citation_count
+    
     @computed_field
     @property
     def has_full_text(self) -> bool:
