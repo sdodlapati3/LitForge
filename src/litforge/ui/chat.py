@@ -16,9 +16,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-# Load environment variables from .env file
+# Load environment variables from .env file FIRST
 from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
+_env_path = Path(__file__).parent.parent.parent.parent / ".env"
+_env_loaded = load_dotenv(_env_path)
 
 from litforge.api import search, lookup, citations, references, Paper
 
@@ -33,8 +34,10 @@ try:
         os.environ.get("GITHUB_TOKEN"),
         os.environ.get("OPENAI_API_KEY"),
     ])
-except ImportError:
+    _llm_debug = f"HAS_LLM={HAS_LLM}, env_loaded={_env_loaded}, env_path={_env_path}"
+except ImportError as e:
     HAS_LLM = False
+    _llm_debug = f"Import error: {e}"
 
 # LLM-powered query expansion
 def expand_query_with_llm(user_query: str, provider: str | None = None) -> dict:
@@ -89,13 +92,33 @@ Return ONLY valid JSON in this exact format:
         )
         
         # Parse JSON from response
-        # Handle potential markdown code blocks
+        # Handle potential markdown code blocks and text before JSON
         response = response.strip()
-        if response.startswith("```"):
-            response = response.split("```")[1]
-            if response.startswith("json"):
-                response = response[4:]
-        response = response.strip()
+        
+        # Try to find JSON in the response
+        # Case 1: JSON wrapped in code blocks
+        if "```" in response:
+            # Extract content between backticks
+            parts = response.split("```")
+            for part in parts:
+                part = part.strip()
+                if part.startswith("json"):
+                    part = part[4:].strip()
+                if part.startswith("{"):
+                    response = part
+                    break
+        
+        # Case 2: Text before JSON - find the first {
+        if not response.startswith("{"):
+            brace_idx = response.find("{")
+            if brace_idx != -1:
+                response = response[brace_idx:]
+        
+        # Case 3: Text after JSON - find the last }
+        if response.startswith("{"):
+            last_brace = response.rfind("}")
+            if last_brace != -1:
+                response = response[:last_brace + 1]
         
         result = json.loads(response)
         # Add which provider was used
@@ -236,8 +259,13 @@ def main():
             
             if providers:
                 st.caption(f"🔗 Providers: {', '.join(providers)}")
+            
+            # Debug info
+            with st.expander("🔧 Debug Info"):
+                st.code(_llm_debug)
         else:
             st.warning("⚠️ Set API keys in .env to enable AI-powered search")
+            st.caption(f"Debug: {_llm_debug}")
         
         st.markdown("---")
         st.markdown("### 💬 Example Commands")
@@ -301,9 +329,14 @@ def main():
                 
                 # Try LLM-powered query expansion for better results
                 expanded = None
+                expansion_error = None
                 if HAS_LLM and st.session_state.get("use_llm_search", True):
                     with st.spinner("🧠 Understanding your query..."):
-                        expanded = expand_query_with_llm(prompt)
+                        try:
+                            expanded = expand_query_with_llm(prompt)
+                        except Exception as e:
+                            expansion_error = str(e)
+                            st.warning(f"⚠️ LLM expansion error: {e}")
                 
                 all_papers = []
                 
@@ -312,6 +345,7 @@ def main():
                     provider = expanded.get("provider", "AI")
                     provider_emoji = {"cerebras": "⚡", "groq": "🚀", "google": "🔮", "github": "🐙", "openai": "💚"}.get(provider, "🧠")
                     st.info(f"{provider_emoji} **{provider.title()} Insight**: {expanded.get('explanation', 'Expanding search...')}")
+                    st.caption(f"Queries: {', '.join(expanded['search_queries'][:3])}")
                     
                     search_queries = expanded["search_queries"]
                     must_contain = [t.lower() for t in expanded.get("must_contain", [])]
@@ -344,6 +378,15 @@ def main():
                     papers = unique_papers[:max_results]
                 else:
                     # Fallback to simple search
+                    if expansion_error:
+                        st.warning(f"⚠️ AI search unavailable: {expansion_error}")
+                    elif HAS_LLM and not st.session_state.get("use_llm_search", True):
+                        st.caption("ℹ️ AI search disabled. Enable in sidebar.")
+                    elif not HAS_LLM:
+                        st.caption("ℹ️ No LLM providers available.")
+                    else:
+                        st.caption("ℹ️ Using basic search (AI expansion returned empty).")
+                    
                     with st.spinner(f"Searching for '{query}'..."):
                         papers = search(query, limit=max_results, year_from=year_from, year_to=year_to)
                 
