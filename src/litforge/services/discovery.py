@@ -8,7 +8,6 @@ and result merging.
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import logging
 from typing import Any, Sequence
 
@@ -217,35 +216,9 @@ class DiscoveryService:
             return []
     
     def _deduplicate(self, papers: list[Publication]) -> list[Publication]:
-        """
-        Deduplicate papers by DOI and title similarity.
-        
-        Merges information from duplicate entries.
-        """
-        seen: dict[str, Publication] = {}
-        
-        for paper in papers:
-            # Generate a dedup key
-            key = self._get_dedup_key(paper)
-            
-            if key in seen:
-                # Merge with existing
-                seen[key].merge_from(paper)
-            else:
-                seen[key] = paper
-        
-        return list(seen.values())
-    
-    def _get_dedup_key(self, paper: Publication) -> str:
-        """Generate a deduplication key for a paper."""
-        # Prefer DOI
-        if paper.doi:
-            return f"doi:{paper.doi.lower()}"
-        
-        # Fall back to title hash
-        title_normalized = paper.title.lower().strip()
-        title_hash = hashlib.md5(title_normalized.encode()).hexdigest()[:16]
-        return f"title:{title_hash}"
+        """Deduplicate papers by DOI and title similarity."""
+        from litforge.services.utils import deduplicate_papers
+        return deduplicate_papers(papers)
     
     def _sort_papers(
         self,
