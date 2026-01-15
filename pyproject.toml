@@ -96,6 +96,14 @@ faiss = [
     "faiss-cpu>=1.7.0",
 ]
 
+# Embedding index (for local paper search)
+embedding-index = [
+    "faiss-cpu>=1.7.0",
+    "datasets>=2.14.0",
+    "sentence-transformers>=2.2.0",
+    "numpy>=1.24.0",
+]
+
 # Graph analysis
 graph = [
     "networkx>=3.0",
@@ -157,7 +165,7 @@ docs = [
 
 # All optional dependencies
 all = [
-    "litforge[local,full,graph,server,mcp,crewai,langchain,dev,docs]",
+    "litforge[local,full,graph,server,mcp,crewai,langchain,embedding-index,dev,docs]",
 ]
 
 [project.urls]
