@@ -9,20 +9,101 @@ This provides a chat-based interface where users can:
 
 import streamlit as st
 import json
+import os
 from datetime import datetime
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
+
 from litforge.api import search, lookup, citations, references, Paper
 
-# Try to import LLM for intent parsing
+# Try to import LLM for query expansion
 try:
-    import httpx
-    HAS_HTTP = True
+    from litforge.llm.router import LLMRouter, get_llm
+    # Check if ANY LLM provider is available
+    HAS_LLM = any([
+        os.environ.get("CEREBRAS_API_KEY"),
+        os.environ.get("GROQ_API_KEY"),
+        os.environ.get("GOOGLE_API_KEY"),
+        os.environ.get("GITHUB_TOKEN"),
+        os.environ.get("OPENAI_API_KEY"),
+    ])
 except ImportError:
-    HAS_HTTP = False
+    HAS_LLM = False
+
+# LLM-powered query expansion
+def expand_query_with_llm(user_query: str, provider: str | None = None) -> dict:
+    """
+    Use LLM (free tier cascade) to understand the user's intent and expand their query.
+    
+    Providers tried in order: Cerebras > Groq > Google > GitHub Models > OpenAI
+    
+    Returns:
+        {
+            "search_queries": list of optimized search queries,
+            "must_contain": list of terms that must appear in results,
+            "exclude_terms": list of terms to exclude,
+            "explanation": why these queries were chosen,
+            "provider": which LLM was used
+        }
+    """
+    if not HAS_LLM:
+        return None
+    
+    try:
+        llm = get_llm(provider)  # Smart router with free-tier cascade
+        
+        system_prompt = """You are an expert scientific literature search assistant. Given a user's natural language question, 
+you must convert it into effective search queries for academic databases like OpenAlex and arXiv.
+
+CRITICAL: Users often use informal or incorrect terminology. Your job is to:
+1. Identify what the user is REALLY looking for (interpret their intent)
+2. Generate 2-4 precise academic search queries using CORRECT technical terminology
+3. Identify key terms that MUST appear in relevant results
+4. Identify terms to EXCLUDE (homonyms, unrelated fields with similar names)
+
+IMPORTANT EXAMPLES of correcting user terminology:
+- "liquid foundation models" → The user likely means "Liquid Neural Networks" (by Hasani et al.), NOT foundation models. Search: ["Liquid Neural Networks", "Liquid Time-constant Networks", "LTC neural networks", "continuous-time neural networks"]
+- "transformers" → Could be ML model OR electrical. If ML context, search: ["transformer neural network", "attention mechanism", "BERT", "GPT"]
+- "GAN" → Search: ["generative adversarial network", "GAN deep learning", "image synthesis neural network"]
+- "diffusion models" → Search: ["diffusion probabilistic models", "denoising diffusion", "score-based generative models"]
+
+Return ONLY valid JSON in this exact format:
+{
+    "search_queries": ["query1", "query2", ...],
+    "must_contain": ["term1", "term2"],
+    "exclude_terms": ["term1", "term2"],
+    "explanation": "Brief explanation of what you think the user wants"
+}
+"""
+        
+        response = llm.generate(
+            prompt=f"User query: {user_query}",
+            system_prompt=system_prompt,
+            max_tokens=500
+        )
+        
+        # Parse JSON from response
+        # Handle potential markdown code blocks
+        response = response.strip()
+        if response.startswith("```"):
+            response = response.split("```")[1]
+            if response.startswith("json"):
+                response = response[4:]
+        response = response.strip()
+        
+        result = json.loads(response)
+        # Add which provider was used
+        result["provider"] = llm.provider_name if hasattr(llm, 'provider_name') else "unknown"
+        return result
+    except Exception as e:
+        st.warning(f"LLM query expansion failed: {e}")
+        return None
 
 
 def parse_user_intent(message: str, has_results: bool = False) -> dict:
@@ -131,6 +212,34 @@ def main():
         year_to = st.number_input("Year To", 1900, 2026, 2026)
         
         st.markdown("---")
+        
+        # LLM-powered search toggle
+        if HAS_LLM:
+            st.markdown("### 🧠 AI-Powered Search")
+            use_llm = st.toggle("Enable Smart Query Expansion", value=True, 
+                               help="Use AI to understand your query and find better results")
+            if "use_llm_search" not in st.session_state:
+                st.session_state.use_llm_search = use_llm
+            else:
+                st.session_state.use_llm_search = use_llm
+            
+            if use_llm:
+                st.caption("✅ AI expands queries like 'liquid foundation models' → 'Liquid Neural Networks'")
+            
+            # Show available providers
+            providers = []
+            if os.environ.get("CEREBRAS_API_KEY"): providers.append("Cerebras")
+            if os.environ.get("GROQ_API_KEY"): providers.append("Groq")
+            if os.environ.get("GOOGLE_API_KEY"): providers.append("Gemini")
+            if os.environ.get("GITHUB_TOKEN"): providers.append("GitHub")
+            if os.environ.get("OPENAI_API_KEY"): providers.append("OpenAI")
+            
+            if providers:
+                st.caption(f"🔗 Providers: {', '.join(providers)}")
+        else:
+            st.warning("⚠️ Set API keys in .env to enable AI-powered search")
+        
+        st.markdown("---")
         st.markdown("### 💬 Example Commands")
         st.markdown("""
         - `Find papers on CRISPR`
@@ -189,8 +298,54 @@ def main():
         with st.chat_message("assistant"):
             if intent["intent"] == "search":
                 query = intent["params"]["query"]
-                with st.spinner(f"Searching for '{query}'..."):
-                    papers = search(query, limit=max_results, year_from=year_from, year_to=year_to)
+                
+                # Try LLM-powered query expansion for better results
+                expanded = None
+                if HAS_LLM and st.session_state.get("use_llm_search", True):
+                    with st.spinner("🧠 Understanding your query..."):
+                        expanded = expand_query_with_llm(prompt)
+                
+                all_papers = []
+                
+                if expanded and expanded.get("search_queries"):
+                    # Use LLM-expanded queries
+                    provider = expanded.get("provider", "AI")
+                    provider_emoji = {"cerebras": "⚡", "groq": "🚀", "google": "🔮", "github": "🐙", "openai": "💚"}.get(provider, "🧠")
+                    st.info(f"{provider_emoji} **{provider.title()} Insight**: {expanded.get('explanation', 'Expanding search...')}")
+                    
+                    search_queries = expanded["search_queries"]
+                    must_contain = [t.lower() for t in expanded.get("must_contain", [])]
+                    exclude_terms = [t.lower() for t in expanded.get("exclude_terms", [])]
+                    
+                    with st.spinner(f"Searching with {len(search_queries)} optimized queries..."):
+                        for sq in search_queries[:4]:  # Limit to 4 queries
+                            try:
+                                results = search(sq, limit=max_results // 2, year_from=year_from, year_to=year_to)
+                                all_papers.extend(results)
+                            except Exception as e:
+                                pass
+                    
+                    # Deduplicate by title
+                    seen = set()
+                    unique_papers = []
+                    for p in all_papers:
+                        key = p.title.lower()[:60] if p.title else ""
+                        if key and key not in seen:
+                            seen.add(key)
+                            # Apply must_contain filter
+                            text = f"{p.title} {p.abstract or ''}".lower()
+                            if must_contain and not any(t in text for t in must_contain):
+                                continue
+                            # Apply exclude filter  
+                            if exclude_terms and any(t in text for t in exclude_terms):
+                                continue
+                            unique_papers.append(p)
+                    
+                    papers = unique_papers[:max_results]
+                else:
+                    # Fallback to simple search
+                    with st.spinner(f"Searching for '{query}'..."):
+                        papers = search(query, limit=max_results, year_from=year_from, year_to=year_to)
                 
                 if papers:
                     st.session_state.papers = papers
