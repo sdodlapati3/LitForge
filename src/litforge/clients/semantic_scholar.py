@@ -278,7 +278,7 @@ class SemanticScholarClient(BaseClient):
             venue=data.get("venue"),
             publication_type=PublicationType.ARTICLE,
             keywords=data.get("fieldsOfStudy") or [],
-            citation_count=data.get("citationCount", 0),
+            citation_count=data.get("citationCount") or 0,
             semantic_scholar_id=ss_id,
             pmid=ext_ids.get("PubMed"),
             pmcid=ext_ids.get("PubMedCentral"),

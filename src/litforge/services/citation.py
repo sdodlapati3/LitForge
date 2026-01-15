@@ -230,24 +230,29 @@ class CitationService:
     
     def _get_paper_id(self, paper: Publication) -> str:
         """Get a unique identifier for a paper."""
-        return paper.doi or paper.openalex_id or paper.semantic_scholar_id or paper.title
+        return getattr(paper, 'doi', None) or getattr(paper, 'openalex_id', None) or getattr(paper, 'semantic_scholar_id', None) or getattr(paper, 'title', 'unknown')
     
     def _get_ss_paper_id(self, paper: Publication) -> str | None:
         """Get the Semantic Scholar paper ID or DOI formatted for SS API."""
-        if paper.semantic_scholar_id:
-            return paper.semantic_scholar_id
-        if paper.doi:
-            return f"DOI:{paper.doi}"
-        if paper.arxiv_id:
-            return f"arXiv:{paper.arxiv_id}"
-        if paper.pmid:
-            return f"PMID:{paper.pmid}"
+        ss_id = getattr(paper, 'semantic_scholar_id', None)
+        if ss_id:
+            return ss_id
+        doi = getattr(paper, 'doi', None)
+        if doi:
+            return f"DOI:{doi}"
+        arxiv_id = getattr(paper, 'arxiv_id', None)
+        if arxiv_id:
+            return f"arXiv:{arxiv_id}"
+        pmid = getattr(paper, 'pmid', None)
+        if pmid:
+            return f"PMID:{pmid}"
         return None
     
     def _get_citing_papers(self, paper: Publication) -> list[Publication]:
         """Get papers that cite this paper. Prefers OpenAlex, falls back to Semantic Scholar."""
         # Try OpenAlex first (more complete coverage)
-        if paper.openalex_id:
+        openalex_id = getattr(paper, 'openalex_id', None)
+        if openalex_id:
             try:
                 from litforge.clients.openalex import OpenAlexClient
                 client = OpenAlexClient(email=self.config.sources.openalex_email)
@@ -276,7 +281,8 @@ class CitationService:
     def _get_referenced_papers(self, paper: Publication) -> list[Publication]:
         """Get papers referenced by this paper. Prefers OpenAlex, falls back to Semantic Scholar."""
         # Try OpenAlex first (more complete coverage)
-        if paper.openalex_id:
+        openalex_id = getattr(paper, 'openalex_id', None)
+        if openalex_id:
             try:
                 from litforge.clients.openalex import OpenAlexClient
                 client = OpenAlexClient(email=self.config.sources.openalex_email)
