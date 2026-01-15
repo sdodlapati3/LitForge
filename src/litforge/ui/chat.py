@@ -23,6 +23,13 @@ _env_loaded = load_dotenv(_env_path)
 
 from litforge.api import search, lookup, citations, references, Paper
 
+# Citation network support
+try:
+    from litforge.services.citation import CitationService
+    HAS_CITATION_NETWORK = True
+except ImportError:
+    HAS_CITATION_NETWORK = False
+
 # Note: Ensemble scoring is handled inside rag_search.py and semantic_search.py
 try:
     from litforge.services.scoring import EnsembleScorer
@@ -126,6 +133,22 @@ def parse_user_intent(message: str, has_results: bool = False) -> dict:
     # Citations intent
     if "citing" in msg_lower or "citations" in msg_lower or "who cited" in msg_lower:
         return {"intent": "citations", "params": {}}
+    
+    # Citation network intent - check if it includes a paper query
+    network_keywords = ["citation network", "build network", "network graph", "citation graph", "paper network"]
+    if any(kw in msg_lower for kw in network_keywords):
+        # Extract depth if specified
+        depth_match = re.search(r'depth\s*(\d+)', msg_lower)
+        depth = int(depth_match.group(1)) if depth_match else 2
+        
+        # Check if user specified a paper/topic to search for
+        # Pattern: "citation network for X" or "build network for X"
+        for_match = re.search(r'(?:citation network|build network|network graph|citation graph|paper network)\s+(?:for|of|on|about)\s+(.+?)(?:\s+depth|\s*$)', msg_lower)
+        if for_match:
+            query = for_match.group(1).strip()
+            return {"intent": "network_with_search", "params": {"depth": depth, "query": query}}
+        
+        return {"intent": "network", "params": {"depth": depth}}
     
     # Help intent
     if msg_lower in ["help", "?", "what can you do", "commands"]:
@@ -241,6 +264,7 @@ def main():
         - `Export as BibTeX`
         - `Look up 10.1038/nature14539`
         - `Who cited this paper?`
+        - `Build citation network`
         """)
     
     # Initialize chat history and results
@@ -562,6 +586,218 @@ def main():
                     st.markdown(response)
                     st.session_state.messages.append({"role": "assistant", "content": response})
             
+            elif intent["intent"] == "network_with_search":
+                # User wants to build network for a specific paper - search first, then build
+                query = intent["params"].get("query", "")
+                depth = intent["params"].get("depth", 2)
+                
+                if not HAS_CITATION_NETWORK:
+                    response = "Citation network feature not available. Install networkx: `pip install networkx`"
+                    st.markdown(response)
+                    st.session_state.messages.append({"role": "assistant", "content": response})
+                else:
+                    with st.spinner(f"🔍 Searching for '{query}'..."):
+                        # Use basic search with explicit terms for better precision
+                        papers = search(query, limit=10, use_semantic=False)
+                        
+                        # If no results, try with semantic search
+                        if not papers:
+                            papers = search(query, limit=10)
+                    
+                    if not papers:
+                        response = f"No papers found for '{query}'. Try a different search term."
+                        st.markdown(response)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
+                    else:
+                        # Show top 3 candidates so user can verify
+                        st.markdown("**🔍 Top matches:**")
+                        for i, p in enumerate(papers[:3], 1):
+                            title = p.title[:60] + '...' if len(p.title) > 60 else p.title
+                            year = getattr(p, 'year', '?')
+                            cites = getattr(p, 'citation_count', 0) or 0
+                            st.caption(f"{i}. {title} ({year}) - {cites:,} citations")
+                        
+                        seed_paper = papers[0]
+                        st.session_state.papers = papers
+                        st.info(f"🌱 **Using seed:** {seed_paper.title}")
+                        
+                        with st.spinner(f"🔗 Building citation network (depth={depth})..."):
+                            try:
+                                citation_service = CitationService()
+                                network = citation_service.build_network(
+                                    seed_papers=[seed_paper],
+                                    depth=depth,
+                                    max_papers=100,
+                                    direction='both'
+                                )
+                                
+                                # Display network summary
+                                st.success(f"✓ Citation network built!")
+                                
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("📄 Papers", network.num_nodes)
+                                with col2:
+                                    st.metric("🔗 Citations", network.num_edges)
+                                with col3:
+                                    st.metric("🔬 Clusters", len(network.clusters))
+                                
+                                # Most influential papers
+                                st.markdown("**🏆 Most Influential Papers (by PageRank):**")
+                                key_papers = citation_service.find_key_papers(network, metric='pagerank', limit=10)
+                                for i, p in enumerate(key_papers[:10], 1):
+                                    if p:
+                                        title = p.title[:55] + '...' if len(p.title) > 55 else p.title
+                                        cites = getattr(p, 'citation_count', 0) or 0
+                                        st.caption(f"{i}. {title} ({cites:,} citations)")
+                                
+                                # Export options
+                                st.markdown("**📥 Export Network:**")
+                                col1, col2 = st.columns(2)
+                                
+                                try:
+                                    import json
+                                    from networkx.readwrite import json_graph
+                                    G = network.to_networkx()
+                                    network_json = json.dumps(json_graph.node_link_data(G, edges='links'), indent=2)
+                                    with col1:
+                                        st.download_button(
+                                            "📊 Download JSON",
+                                            network_json,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.json",
+                                            "application/json",
+                                            key=f"net_json_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"JSON export error: {e}")
+                                
+                                try:
+                                    import tempfile
+                                    import networkx as nx
+                                    G = network.to_networkx()
+                                    with tempfile.NamedTemporaryFile(mode='w', suffix='.graphml', delete=False) as f:
+                                        nx.write_graphml(G, f.name)
+                                        with open(f.name, 'r') as gf:
+                                            graphml_data = gf.read()
+                                    with col2:
+                                        st.download_button(
+                                            "🕸️ Download GraphML",
+                                            graphml_data,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.graphml",
+                                            "application/xml",
+                                            key=f"net_graphml_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"GraphML export error: {e}")
+                                
+                                response = f"Built citation network for '{seed_paper.title}' with {network.num_nodes} papers and {network.num_edges} citation links."
+                                st.session_state.messages.append({"role": "assistant", "content": response})
+                                
+                            except Exception as e:
+                                import traceback
+                                response = f"Error building citation network: {e}"
+                                st.error(response)
+                                st.caption(traceback.format_exc())
+                                st.session_state.messages.append({"role": "assistant", "content": response})
+            
+            elif intent["intent"] == "network":
+                # Build citation network for current papers
+                if not st.session_state.papers:
+                    response = "No papers to build network from. Try: `citation network for [paper name]`"
+                    st.markdown(response)
+                else:
+                    if not HAS_CITATION_NETWORK:
+                        response = "Citation network feature not available. Install networkx: `pip install networkx`"
+                        st.markdown(response)
+                    else:
+                        depth = intent["params"].get("depth", 2)
+                        seed_paper = st.session_state.papers[0]
+                        
+                        with st.spinner(f"🔗 Building citation network (depth={depth})..."):
+                            try:
+                                citation_service = CitationService()
+                                network = citation_service.build_network(
+                                    seed_papers=[seed_paper],
+                                    depth=depth,
+                                    max_papers=100,
+                                    direction='both'
+                                )
+                                
+                                # Display network summary
+                                st.success(f"✓ Citation network built!")
+                                
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("📄 Papers", network.num_nodes)
+                                with col2:
+                                    st.metric("🔗 Citations", network.num_edges)
+                                with col3:
+                                    st.metric("🔬 Clusters", len(network.clusters))
+                                
+                                # Show seed paper
+                                st.markdown(f"**🌱 Seed Paper:** {seed_paper.title}")
+                                
+                                # Most influential papers
+                                st.markdown("**🏆 Most Influential Papers (by PageRank):**")
+                                key_papers = citation_service.find_key_papers(network, metric='pagerank', limit=10)
+                                for i, p in enumerate(key_papers[:10], 1):
+                                    if p:
+                                        title = p.title[:55] + '...' if len(p.title) > 55 else p.title
+                                        cites = getattr(p, 'citation_count', 0) or 0
+                                        st.caption(f"{i}. {title} ({cites:,} citations)")
+                                
+                                # Export options
+                                st.markdown("**📥 Export Network:**")
+                                col1, col2 = st.columns(2)
+                                
+                                # Export as JSON
+                                try:
+                                    import json
+                                    from networkx.readwrite import json_graph
+                                    G = network.to_networkx()
+                                    network_json = json.dumps(json_graph.node_link_data(G, edges='links'), indent=2)
+                                    with col1:
+                                        st.download_button(
+                                            "📊 Download JSON",
+                                            network_json,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.json",
+                                            "application/json",
+                                            key=f"net_json_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"JSON export error: {e}")
+                                
+                                # Export as GraphML
+                                try:
+                                    import tempfile
+                                    import networkx as nx
+                                    G = network.to_networkx()
+                                    with tempfile.NamedTemporaryFile(mode='w', suffix='.graphml', delete=False) as f:
+                                        nx.write_graphml(G, f.name)
+                                        f.seek(0)
+                                        with open(f.name, 'r') as gf:
+                                            graphml_data = gf.read()
+                                    with col2:
+                                        st.download_button(
+                                            "🕸️ Download GraphML",
+                                            graphml_data,
+                                            f"citation_network_{datetime.now().strftime('%Y%m%d')}.graphml",
+                                            "application/xml",
+                                            key=f"net_graphml_{datetime.now().timestamp()}"
+                                        )
+                                except Exception as e:
+                                    st.caption(f"GraphML export error: {e}")
+                                
+                                response = f"Built citation network with {network.num_nodes} papers and {network.num_edges} citation links."
+                                st.session_state.messages.append({"role": "assistant", "content": response})
+                                
+                            except Exception as e:
+                                import traceback
+                                response = f"Error building citation network: {e}"
+                                st.error(response)
+                                st.caption(traceback.format_exc())
+                                st.session_state.messages.append({"role": "assistant", "content": response})
+            
             elif intent["intent"] == "help":
                 response = """
 **I can help you with:**
@@ -573,6 +809,8 @@ def main():
 📄 **Lookup**: "Look up DOI 10.1038/nature14539"
 
 📊 **Citations**: "Who cited this paper?" (after looking up a paper)
+
+🔗 **Network**: "Build citation network" (after searching for papers)
 
 Just type naturally and I'll understand!
                 """
